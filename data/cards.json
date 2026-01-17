@@ -1,4 +1,13 @@
 {
-  "updated_at": "1970-01-01T00:00:00.000Z",
-  "items": []
+  "updated_at": "2026-01-17T06:23:06.216Z",
+  "items": [
+    {
+      "id": "goddess-netsu-1768630985252",
+      "name": "Goddess Netsu",
+      "rarity": "common",
+      "description": "",
+      "image": "images/cards/goddess-netsu-1768630985252.png",
+      "created_at": "2026-01-17T06:23:06.215Z"
+    }
+  ]
 }
