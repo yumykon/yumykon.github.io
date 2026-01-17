@@ -119,10 +119,18 @@ async function extractProductDetails(page, url) {
 
     // limpeza extra de título (caso venha com “Ko-fi Shop” etc.)
     const clean = (s) => (s || "").replace(/\s+/g, " ").trim();
-    const title = clean(data.title)
-      .replace(/\b\d+\s*sold\b/i, "")
-      .replace(/\s+-\s+Ko-fi.*$/i, "")
-      .trim() || "Product";
+    let title = clean(data.title)
+  .replace(/\b\d+\s*sold\b/i, "")
+  .trim();
+
+// remove exatamente o sufixo do Ko-fi Shop do seu perfil
+title = title.replace(/\s*-\s*Yumykon's Ko-fi Shop\s*$/i, "").trim();
+
+// fallback genérico caso mude o texto no futuro
+title = title.replace(/\s*-\s*.*Ko-fi Shop\s*$/i, "").trim();
+
+title = title || "Product";
+
 
     const image = clean(data.image);
     const price = clean(data.price);
