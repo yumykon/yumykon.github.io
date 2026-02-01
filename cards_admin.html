@@ -1,531 +1,490 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yumykon — Cards Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Gabarito&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --accent: #B45AD3;
-      --accent2: #6c63ff;
-      --paper: #fff;
-      --ink: #111;
-      --muted: #6b6b6b;
-      --shadow: rgba(0,0,0,0.12);
-    }
-    body {
-      margin: 0;
-      font-family: 'Gabarito', sans-serif;
-      background: url('images/background-stars.png') center center repeat;
-      background-size: cover;
-      color: #fff;
-    }
-    header {
-      background: #fff;
-      padding: 14px 0;
-      text-align: center;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      font-size: 13px;
-    }
-    nav a {
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: -0.025em;
-      line-height: 1.625;
-      padding: 0 15px;
-      position: relative;
-      transition: color 0.3s;
-    }
-    nav a:not(:last-child)::after {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 22px;
-      border-right: 1px solid var(--accent);
-    }
-    nav a:hover { color: #562966; }
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cards Admin</title>
+    <meta name="robots" content="noindex, nofollow" />
 
-    .wrap {
-      width: 100%;
-      max-width: 980px;
-      margin: 34px auto 80px;
-      background: var(--paper);
-      color: var(--ink);
-      border-radius: 28px;
-      box-shadow: 0 18px 60px var(--shadow);
-      overflow: hidden;
-    }
-    .inner { padding: 26px; }
-    h1 { margin: 0 0 8px; font-size: 20px; }
-    p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
-    .note {
-      margin-top: 10px;
-      background: #fff7ff;
-      border: 1px solid rgba(180,90,211,0.25);
-      padding: 12px;
-      border-radius: 14px;
-      font-size: 13px;
-      color: #4a2a55;
-    }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
-    @media (max-width: 760px) { .row { grid-template-columns: 1fr; } }
+    <style>
+      :root {
+        --bg: #070718;
+        --panel: #ffffff;
+        --text: #1a1a1a;
+        --muted: #4b4b4b;
+        --accent: #7a62ff;
+        --danger: #d83144;
+        --ok: #1f9d55;
+        --shadow: rgba(0, 0, 0, 0.18);
+        --radius: 40px;
+      }
 
-    label { display: block; font-size: 13px; color: #333; margin: 12px 0 6px; }
-    input, select, textarea {
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid rgba(0,0,0,0.14);
-      border-radius: 14px;
-      padding: 10px 12px;
-      font-family: inherit;
-      font-size: 14px;
-      outline: none;
-      background: #fff;
-    }
-    textarea { min-height: 130px; resize: vertical; white-space: pre-wrap; }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(180,90,211,0.15);
-    }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        color: var(--text);
+        background: var(--bg) url("images/background-stars.png") repeat;
+      }
 
-    .btn {
-      display: inline-block;
-      margin-top: 14px;
-      background: var(--accent2);
-      color: #fff;
-      border: 0;
-      padding: 10px 16px;
-      border-radius: 14px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .btn:hover { background: #8a7fff; }
-    .btn.secondary { background: #f3f3f3; color: #111; }
-    .btn.secondary:hover { background: #eaeaea; }
-    .btn.danger { background: #ff4d4d; }
-    .btn.danger:hover { background: #ff6b6b; }
+      .wrap {
+        min-height: 100%;
+        padding: 34px 18px 70px;
+        display: flex;
+        justify-content: center;
+      }
 
-    .divider { height: 1px; background: rgba(0,0,0,0.08); margin: 22px 0; }
-    .hidden { display: none; }
+      .panel {
+        width: min(980px, 100%);
+        background: var(--panel);
+        border-radius: var(--radius);
+        box-shadow: 0 24px 70px var(--shadow);
+        padding: 34px 30px 34px;
+      }
 
-    .status {
-      margin-top: 12px;
-      font-size: 13px;
-      color: #333;
-      background: #f7f7ff;
-      border: 1px solid rgba(108,99,255,0.25);
-      padding: 10px 12px;
-      border-radius: 14px;
-      white-space: pre-wrap;
-    }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
 
-    .preview {
-      margin-top: 12px;
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      flex-wrap: wrap;
-    }
-    .preview img {
-      width: 180px;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      border-radius: 18px;
-      border: 1px solid rgba(0,0,0,0.10);
-      background: #f2f2f2;
-    }
-    .preview .meta {
-      flex: 1;
-      min-width: 240px;
-      color: #333;
-      font-size: 13px;
-    }
-    .small {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 6px;
-    }
-    .kbd {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-      padding: 2px 6px;
-      border-radius: 8px;
-      background: #f3f3f3;
-      border: 1px solid rgba(0,0,0,0.08);
-    }
-  </style>
-</head>
+      h1 {
+        margin: 0;
+        font-size: 22px;
+      }
 
-<body>
-  <header>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="yumiverse.html">Yumyverse</a>
-      <a href="cards.html">Collectible Cards Club</a>
-      <a href="http://ko-fi.com/yumykon/shop" target="_blank" rel="noopener">Shop</a>
-      <a href="https://patreon.yumykon.com" target="_blank" rel="noopener">Patreon</a>
-      <a href="https://ko-fi.com/yumykon/commissions" target="_blank" rel="noopener">Commissions</a>
-    </nav>
-  </header>
+      .sub {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
 
-  <div class="wrap">
-    <div class="inner">
-      <h1>Cards Admin</h1>
-      <p>Adicionar novas cards e atualizar automaticamente a galeria (GitHub Pages + commit via GitHub API).</p>
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
 
-      <div class="note">
-        Este painel faz commit diretamente no repositório usando um <b>GitHub Token</b>.
-        Use um token <b>fine-grained</b> com permissão apenas para <span class="kbd">Contents: Read/Write</span> neste repo.
-        Não compartilhe esse token com ninguém.
-      </div>
+      @media (max-width: 820px) {
+        .row { grid-template-columns: 1fr; }
+      }
 
-      <div class="divider"></div>
+      .card {
+        margin-top: 18px;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 18px;
+        padding: 16px;
+        background: rgba(255,255,255,0.9);
+      }
 
-      <!-- Login simples (client-side) -->
-      <div id="loginBox">
-        <label>Senha (gate)</label>
-        <input id="gatePass" type="password" placeholder="senha" />
-        <button class="btn" id="btnGate">Entrar</button>
-        <div class="small">Obs: isso é só um gate no front-end. A segurança real é o token do GitHub.</div>
-      </div>
+      label {
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        margin-bottom: 6px;
+      }
 
-      <div id="app" class="hidden">
-        <div class="row">
+      input, select, textarea {
+        width: 100%;
+        border: 1px solid rgba(0,0,0,0.14);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 14px;
+        outline: none;
+      }
+
+      textarea {
+        min-height: 110px;
+        resize: vertical;
+        line-height: 1.5;
+      }
+
+      input:focus, select:focus, textarea:focus {
+        border-color: rgba(122,98,255,0.55);
+        box-shadow: 0 0 0 4px rgba(122,98,255,0.12);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        border: 2px solid rgba(122,98,255,0.55);
+        background: #fff;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 800;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .btn.primary {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+
+      .btn.danger {
+        background: #fff;
+        color: var(--danger);
+        border-color: rgba(216,49,68,0.55);
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .status {
+        margin-top: 12px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .status.ok { color: var(--ok); }
+      .status.err { color: var(--danger); }
+
+      .gate {
+        display: grid;
+        gap: 10px;
+        max-width: 460px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 16px 10px;
+      }
+
+      .hidden { display: none !important; }
+
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      code {
+        background: rgba(0,0,0,0.06);
+        padding: 2px 6px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <main class="panel">
+        <header>
           <div>
-            <label>GitHub Token</label>
-            <input id="ghToken" type="password" placeholder="github token (fine-grained)" />
-            <div class="small">Fica só no <span class="kbd">sessionStorage</span> do seu navegador.</div>
+            <h1>Cards Admin</h1>
+            <p class="sub">Add new collectible cards to the public gallery (updates <code>data/cards.json</code> and uploads the image to <code>images/cards/</code>).</p>
           </div>
-          <div>
-            <label>Branch</label>
-            <input id="ghBranch" type="text" value="main" />
-            <div class="small">Branch padrão do repo.</div>
+
+          <a class="btn" href="cards.html">Open gallery →</a>
+        </header>
+
+        <!-- Password gate -->
+        <section class="card" id="gateCard">
+          <div class="gate">
+            <div style="font-weight:900; font-size:16px;">Restricted access</div>
+            <div class="hint">This page is static. The password gate is only meant to keep casual visitors out. Do not treat it as strong security.</div>
+            <div style="text-align:left;">
+              <label for="gatePassword">Password</label>
+              <input id="gatePassword" type="password" autocomplete="current-password" placeholder="Enter password" />
+            </div>
+            <button class="btn primary" id="gateEnter">Enter</button>
+            <div class="status" id="gateStatus"></div>
           </div>
-        </div>
+        </section>
 
-        <div class="row">
-          <div>
-            <label>Nome</label>
-            <input id="cardName" type="text" placeholder="ex: Goddess Netsu" />
+        <!-- Admin form -->
+        <section class="card hidden" id="adminCard">
+          <div class="row">
+            <div>
+              <label for="ghToken">GitHub Token</label>
+              <input id="ghToken" type="password" autocomplete="off" placeholder="Fine-grained PAT (Contents: read & write)" />
+              <div class="hint" style="margin-top:6px;">Token is kept only in this tab (session) and is never written to the repository.</div>
+            </div>
+            <div>
+              <label for="repo">Repository</label>
+              <input id="repo" type="text" value="yumykon/yumykon.github.io" />
+              <div class="hint" style="margin-top:6px;">Format: <code>owner/repo</code></div>
+            </div>
           </div>
-          <div>
-            <label>Raridade</label>
-            <select id="cardRarity">
-              <option value="legendary">Legendary</option>
-              <option value="lewd">Lewd</option>
-              <option value="rare">Rare</option>
-              <option value="uncommon">Uncommon</option>
-              <option value="common" selected>Common</option>
-            </select>
+
+          <hr style="border:0; border-top:1px solid rgba(0,0,0,0.08); margin:16px 0;" />
+
+          <div class="row">
+            <div>
+              <label for="cardName">Card name</label>
+              <input id="cardName" type="text" placeholder="e.g., Kari — Night Raid" />
+            </div>
+            <div>
+              <label for="cardRarity">Rarity</label>
+              <select id="cardRarity">
+                <option value="legendary">Legendary</option>
+                <option value="lewd">Lewd</option>
+                <option value="rare">Rare</option>
+                <option value="uncommon">Uncommon</option>
+                <option value="common" selected>Common</option>
+              </select>
+            </div>
           </div>
-        </div>
 
-        <label>Descrição (aparece ao abrir a card)</label>
-        <textarea id="cardDesc" placeholder="escreva a descrição..."></textarea>
+          <div style="margin-top:14px;">
+            <label for="cardDesc">Description (shown when opening the card)</label>
+            <textarea id="cardDesc" placeholder="Write something about this card..."></textarea>
+          </div>
 
-        <label>Imagem</label>
-        <input id="cardImage" type="file" accept="image/png,image/jpeg,image/webp" />
+          <div style="margin-top:14px;">
+            <label for="cardImage">Card image</label>
+            <input id="cardImage" type="file" accept="image/png,image/jpeg,image/webp" />
+            <div class="hint" style="margin-top:6px;">Recommended: PNG, portrait, similar proportions to your cards (3:4).</div>
+          </div>
 
-        <div class="preview" id="preview" style="display:none;">
-          <img id="previewImg" alt="preview" />
-          <div class="meta" id="previewMeta"></div>
-        </div>
-
-        <button class="btn" id="btnSubmit">Registrar card</button>
-        <button class="btn secondary" id="btnClear">Limpar</button>
-        <button class="btn danger" id="btnLogout">Sair</button>
-
-        <div class="status" id="status" style="display:none;"></div>
-      </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; align-items:center;">
+            <button class="btn primary" id="submitBtn">Add card</button>
+            <button class="btn danger" id="clearTokenBtn" type="button">Clear token</button>
+            <div class="status" id="status"></div>
+          </div>
+        </section>
+      </main>
     </div>
-  </div>
 
-  <script>
-    // ====== CONFIG DO REPO ======
-    // Se algum dia você trocar repo/owner, altere aqui.
-    const REPO_OWNER = 'yumykon';
-    const REPO_NAME = 'yumykon.github.io';
+    <script>
+      // 1) Set your own SHA-256 password hash here (hex). See helper below.
+      //    Current value is a placeholder.
+      const GATE_HASH_HEX = '0000000000000000000000000000000000000000000000000000000000000000';
 
-    // Onde ficam os dados e imagens:
-    const CARDS_JSON_PATH = 'data/cards.json';
-    const CARDS_IMG_DIR = 'images/cards';
+      const DATA_PATH = 'data/cards.json';
+      const IMAGES_DIR = 'images/cards';
 
-    // Gate simples (não é segurança real)
-    // Troque por uma senha longa que só você saiba.
-    const GATE_HASH_HEX = '433f86c70d51c9614489d1097091083fe9ccfe4e2bf0ddcf6a500ed6c73ad1d1';
-    // O hash acima é só placeholder. Gere o seu com a função abaixo (console) e cole aqui.
+      const gateCard = document.getElementById('gateCard');
+      const adminCard = document.getElementById('adminCard');
+      const gatePassword = document.getElementById('gatePassword');
+      const gateEnter = document.getElementById('gateEnter');
+      const gateStatus = document.getElementById('gateStatus');
 
-    // ====== ELEMENTOS ======
-    const loginBox = document.getElementById('loginBox');
-    const gatePass = document.getElementById('gatePass');
-    const btnGate = document.getElementById('btnGate');
-    const app = document.getElementById('app');
+      const ghToken = document.getElementById('ghToken');
+      const repoEl = document.getElementById('repo');
+      const cardName = document.getElementById('cardName');
+      const cardRarity = document.getElementById('cardRarity');
+      const cardDesc = document.getElementById('cardDesc');
+      const cardImage = document.getElementById('cardImage');
+      const submitBtn = document.getElementById('submitBtn');
+      const clearTokenBtn = document.getElementById('clearTokenBtn');
+      const statusEl = document.getElementById('status');
 
-    const ghTokenEl = document.getElementById('ghToken');
-    const ghBranchEl = document.getElementById('ghBranch');
+      const allowedRarities = new Set(['legendary','lewd','rare','uncommon','common']);
 
-    const cardNameEl = document.getElementById('cardName');
-    const cardRarityEl = document.getElementById('cardRarity');
-    const cardDescEl = document.getElementById('cardDesc');
-    const cardImageEl = document.getElementById('cardImage');
-
-    const previewBox = document.getElementById('preview');
-    const previewImg = document.getElementById('previewImg');
-    const previewMeta = document.getElementById('previewMeta');
-
-    const btnSubmit = document.getElementById('btnSubmit');
-    const btnClear = document.getElementById('btnClear');
-    const btnLogout = document.getElementById('btnLogout');
-    const statusEl = document.getElementById('status');
-
-    // ====== HELPERS ======
-    function setStatus(msg) {
-      statusEl.style.display = 'block';
-      statusEl.textContent = msg;
-    }
-    function clearStatus() {
-      statusEl.style.display = 'none';
-      statusEl.textContent = '';
-    }
-    function isoNow() { return new Date().toISOString(); }
-
-    function slugify(s) {
-      return (s || '')
-        .toLowerCase()
-        .normalize('NFKD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '')
-        .slice(0, 60) || 'card';
-    }
-
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const r = new FileReader();
-        r.onload = () => {
-          const res = String(r.result || '');
-          // data:<mime>;base64,XXXX
-          const idx = res.indexOf('base64,');
-          if (idx === -1) return reject(new Error('base64 not found'));
-          resolve(res.slice(idx + 7));
-        };
-        r.onerror = reject;
-        r.readAsDataURL(file);
+      const sessionKey = 'cards_admin_token';
+      ghToken.value = sessionStorage.getItem(sessionKey) || '';
+      ghToken.addEventListener('input', () => sessionStorage.setItem(sessionKey, ghToken.value));
+      clearTokenBtn.addEventListener('click', () => {
+        sessionStorage.removeItem(sessionKey);
+        ghToken.value = '';
+        setStatus('Token cleared.', 'ok');
       });
-    }
 
-    async function sha256Hex(str) {
-      const enc = new TextEncoder().encode(str);
-      const buf = await crypto.subtle.digest('SHA-256', enc);
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    async function api(path, { method = 'GET', token, body } = {}) {
-      const url = `https://api.github.com${path}`;
-      const headers = {
-        'Accept': 'application/vnd.github+json',
-      };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-      if (body) headers['Content-Type'] = 'application/json';
-
-      const res = await fetch(url, {
-        method,
-        headers,
-        body: body ? JSON.stringify(body) : undefined,
-      });
-      if (!res.ok) {
-        const txt = await res.text().catch(() => '');
-        throw new Error(`GitHub API ${res.status}: ${txt.slice(0, 500)}`);
+      function setGateStatus(msg, kind) {
+        gateStatus.textContent = msg || '';
+        gateStatus.className = 'status' + (kind ? ' ' + kind : '');
       }
-      return res.json();
-    }
 
-    async function getFile(token, branch, filePath) {
-      const j = await api(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${encodeURIComponent(filePath)}?ref=${encodeURIComponent(branch)}`, { token });
-      const content = atob(String(j.content || '').replace(/\n/g, ''));
-      return { sha: j.sha, content };
-    }
+      function setStatus(msg, kind) {
+        statusEl.textContent = msg || '';
+        statusEl.className = 'status' + (kind ? ' ' + kind : '');
+      }
 
-    async function putFile(token, branch, filePath, base64Content, message, sha) {
-      return api(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${encodeURIComponent(filePath)}`, {
-        method: 'PUT',
-        token,
-        body: {
+      async function sha256Hex(str) {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+      }
+
+      async function checkGate() {
+        const pass = gatePassword.value || '';
+        const hex = await sha256Hex(pass);
+        const ok = hex.toLowerCase() === (GATE_HASH_HEX || '').toLowerCase();
+        if (!ok) {
+          setGateStatus('Wrong password.', 'err');
+          return;
+        }
+        gateCard.classList.add('hidden');
+        adminCard.classList.remove('hidden');
+      }
+
+      gateEnter.addEventListener('click', checkGate);
+      gatePassword.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkGate();
+      });
+
+      function slugify(s) {
+        return (s || '')
+          .toLowerCase()
+          .trim()
+          .replace(/['"]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .slice(0, 64);
+      }
+
+      function assertRepo(value) {
+        const v = (value || '').trim();
+        if (!/^[^/\s]+\/[^/\s]+$/.test(v)) throw new Error('Invalid repository. Use owner/repo.');
+        return v;
+      }
+
+      async function ghRequest(token, method, url, body) {
+        const res = await fetch(url, {
+          method,
+          headers: {
+            'Accept': 'application/vnd.github+json',
+            'Authorization': `Bearer ${token}`,
+            'X-GitHub-Api-Version': '2022-11-28',
+            ...(body ? { 'Content-Type': 'application/json' } : {})
+          },
+          body: body ? JSON.stringify(body) : undefined
+        });
+
+        if (!res.ok) {
+          let details = '';
+          try { details = await res.text(); } catch {}
+          throw new Error(`GitHub API error (${res.status}). ${details}`);
+        }
+        return res.json();
+      }
+
+      async function getFile(token, repo, path) {
+        const url = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`;
+        return ghRequest(token, 'GET', url);
+      }
+
+      async function putFile(token, repo, path, contentBase64, message, sha) {
+        const url = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`;
+        const body = {
           message,
-          content: base64Content,
-          branch,
-          sha,
-        },
-      });
-    }
-
-    function b64FromText(s) {
-      return btoa(unescape(encodeURIComponent(s)));
-    }
-
-    function extFromFile(file) {
-      const t = (file.type || '').toLowerCase();
-      if (t.includes('png')) return 'png';
-      if (t.includes('jpeg') || t.includes('jpg')) return 'jpg';
-      if (t.includes('webp')) return 'webp';
-      // fallback
-      const n = (file.name || '').toLowerCase();
-      if (n.endsWith('.png')) return 'png';
-      if (n.endsWith('.jpg') || n.endsWith('.jpeg')) return 'jpg';
-      if (n.endsWith('.webp')) return 'webp';
-      return 'png';
-    }
-
-    // ====== GATE ======
-    function setAuthed(on) {
-      if (on) {
-        loginBox.classList.add('hidden');
-        app.classList.remove('hidden');
-      } else {
-        loginBox.classList.remove('hidden');
-        app.classList.add('hidden');
+          content: contentBase64,
+          ...(sha ? { sha } : {})
+        };
+        return ghRequest(token, 'PUT', url, body);
       }
-    }
 
-    (async () => {
-      // token em session storage
-      const t = sessionStorage.getItem('cards_admin_token') || '';
-      if (t) ghTokenEl.value = t;
-
-      // se já passou pelo gate
-      if (sessionStorage.getItem('cards_admin_gate') === '1') {
-        setAuthed(true);
+      function toBase64(bytes) {
+        let binary = '';
+        const chunkSize = 0x8000;
+        for (let i = 0; i < bytes.length; i += chunkSize) {
+          binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+        }
+        return btoa(binary);
       }
-    })();
 
-    btnGate.addEventListener('click', async () => {
-      clearStatus();
-      const pass = gatePass.value || '';
-      const h = await sha256Hex(pass);
-      if (h !== GATE_HASH_HEX) {
-        alert('Senha incorreta.');
-        return;
+      async function readJsonFromRepo(token, repo) {
+        const file = await getFile(token, repo, DATA_PATH);
+        const content = atob((file.content || '').replace(/\n/g, ''));
+        const json = JSON.parse(content);
+        return { json, sha: file.sha };
       }
-      sessionStorage.setItem('cards_admin_gate', '1');
-      setAuthed(true);
-    });
 
-    // ====== PREVIEW ======
-    cardImageEl.addEventListener('change', () => {
-      const f = cardImageEl.files && cardImageEl.files[0];
-      if (!f) {
-        previewBox.style.display = 'none';
-        return;
-      }
-      const url = URL.createObjectURL(f);
-      previewImg.src = url;
-      previewMeta.textContent = `${f.name} (${Math.round(f.size/1024)} KB)`;
-      previewBox.style.display = 'flex';
-    });
+      async function uploadImage(token, repo, file, id) {
+        const ext = (() => {
+          const t = (file.type || '').toLowerCase();
+          if (t.includes('png')) return 'png';
+          if (t.includes('jpeg') || t.includes('jpg')) return 'jpg';
+          if (t.includes('webp')) return 'webp';
+          // fallback from filename
+          const m = (file.name || '').toLowerCase().match(/\.(png|jpg|jpeg|webp)$/);
+          if (m) return m[1] === 'jpeg' ? 'jpg' : m[1];
+          return 'png';
+        })();
 
-    // ====== ACTIONS ======
-    btnClear.addEventListener('click', () => {
-      cardNameEl.value = '';
-      cardDescEl.value = '';
-      cardRarityEl.value = 'common';
-      cardImageEl.value = '';
-      previewBox.style.display = 'none';
-      clearStatus();
-    });
+        const arrayBuf = await file.arrayBuffer();
+        const bytes = new Uint8Array(arrayBuf);
+        const b64 = toBase64(bytes);
 
-    btnLogout.addEventListener('click', () => {
-      sessionStorage.removeItem('cards_admin_gate');
-      sessionStorage.removeItem('cards_admin_token');
-      ghTokenEl.value = '';
-      setAuthed(false);
-      clearStatus();
-    });
-
-    ghTokenEl.addEventListener('input', () => {
-      sessionStorage.setItem('cards_admin_token', ghTokenEl.value || '');
-    });
-
-    btnSubmit.addEventListener('click', async () => {
-      clearStatus();
-
-      const token = (ghTokenEl.value || '').trim();
-      const branch = (ghBranchEl.value || 'main').trim();
-      const name = (cardNameEl.value || '').trim();
-      const rarity = (cardRarityEl.value || 'common').trim().toLowerCase();
-      const description = (cardDescEl.value || '').trim();
-      const file = cardImageEl.files && cardImageEl.files[0];
-
-      if (!token) return setStatus('Faltou o GitHub Token.');
-      if (!name) return setStatus('Faltou o nome.');
-      if (!file) return setStatus('Faltou a imagem.');
-
-      try {
-        setStatus('1/4 Lendo cards.json...');
-        const current = await getFile(token, branch, CARDS_JSON_PATH);
-        const json = JSON.parse(current.content);
-        const items = Array.isArray(json.items) ? json.items : [];
-
-        const ext = extFromFile(file);
-        const id = `${slugify(name)}-${Date.now()}`;
-        const imgPath = `${CARDS_IMG_DIR}/${id}.${ext}`;
-
-        setStatus('2/4 Enviando imagem (commit)...');
-        const imgB64 = await toBase64(file);
+        const imgPath = `${IMAGES_DIR}/${id}.${ext}`;
         await putFile(
           token,
-          branch,
+          repo,
           imgPath,
-          imgB64,
-          `Add card image: ${name}`,
-          undefined
+          b64,
+          `Add card image: ${id}`
         );
 
-        const entry = {
-          id,
-          name,
-          rarity,
-          description,
-          image: imgPath,
-          created_at: isoNow(),
-        };
-
-        // adiciona no começo
-        items.unshift(entry);
-        const next = {
-          updated_at: isoNow(),
-          items,
-        };
-
-        setStatus('3/4 Atualizando cards.json (commit)...');
-        const nextText = JSON.stringify(next, null, 2) + '\n';
-        const nextB64 = b64FromText(nextText);
-        await putFile(
-          token,
-          branch,
-          CARDS_JSON_PATH,
-          nextB64,
-          `Add card: ${name}`,
-          current.sha
-        );
-
-        setStatus('4/4 Pronto! Sua card foi registrada.\nObs: o GitHub Pages pode levar 1-2 minutos para atualizar.');
-      } catch (e) {
-        setStatus(`Erro: ${String(e && e.message ? e.message : e)}`);
+        return imgPath;
       }
-    });
 
-    // ====== COMO GERAR O HASH DO GATE ======
-    // No console do navegador, rode:
-    //   (async()=>console.log(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('SUA_SENHA')).then(b=>Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join(''))))()
-    // e cole o resultado em GATE_HASH_HEX.
-  </script>
-</body>
+      function validateForm() {
+        const token = (ghToken.value || '').trim();
+        if (!token) throw new Error('GitHub token is required.');
+
+        const repo = assertRepo(repoEl.value);
+        const name = (cardName.value || '').trim();
+        if (!name) throw new Error('Card name is required.');
+
+        const rarity = (cardRarity.value || 'common').trim().toLowerCase();
+        if (!allowedRarities.has(rarity)) throw new Error('Invalid rarity.');
+
+        const desc = (cardDesc.value || '').trim();
+
+        const file = cardImage.files && cardImage.files[0];
+        if (!file) throw new Error('Card image is required.');
+
+        const idBase = slugify(name) || 'card';
+        const id = `${idBase}-${Date.now()}`;
+
+        return { token, repo, name, rarity, desc, file, id };
+      }
+
+      submitBtn.addEventListener('click', async () => {
+        setStatus('', '');
+        submitBtn.disabled = true;
+        try {
+          const { token, repo, name, rarity, desc, file, id } = validateForm();
+
+          setStatus('Uploading image...', '');
+          const imagePath = await uploadImage(token, repo, file, id);
+
+          setStatus('Updating JSON...', '');
+          const { json, sha } = await readJsonFromRepo(token, repo);
+          const cards = Array.isArray(json.cards) ? json.cards : [];
+
+          const next = {
+            updated_at: new Date().toISOString(),
+            cards: [
+              { id, name, rarity, description: desc, image: imagePath },
+              ...cards
+            ]
+          };
+
+          const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(next, null, 2) + '\n')));
+          await putFile(
+            token,
+            repo,
+            DATA_PATH,
+            contentB64,
+            `Add card: ${name}`,
+            sha
+          );
+
+          setStatus('Done! The gallery will update after GitHub Pages deploys.', 'ok');
+          cardName.value = '';
+          cardDesc.value = '';
+          cardRarity.value = 'common';
+          cardImage.value = '';
+        } catch (e) {
+          setStatus(e?.message || 'Something went wrong.', 'err');
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+
+      // Helper: generate hash in DevTools console
+      //   await sha256Hex('your_password')
+    </script>
+  </body>
 </html>
