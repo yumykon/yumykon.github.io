@@ -115,25 +115,27 @@
 
   <!-- auto resize -->
   <script>
-    (function () {
-      const PARENT = "https://yumykon.com";
-      const TYPE = "yumykon:resize";
+  (function () {
+    const PARENT = "https://yumykon.com";
+    const ID = "cardsFrame";
 
-      function height() {
-        return Math.max(
-          document.body.scrollHeight,
-          document.documentElement.scrollHeight
-        );
-      }
+    function h() {
+      return Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+    }
 
-      function send() {
-        window.parent.postMessage({ type: TYPE, height: height() }, PARENT);
-      }
+    function send() {
+      parent.postMessage({ type: "yumykon:resize", id: ID, height: h() }, PARENT);
+    }
 
-      new ResizeObserver(send).observe(document.documentElement);
-      window.addEventListener("load", send);
-    })();
-  </script>
+    new ResizeObserver(send).observe(document.documentElement);
+    window.addEventListener("load", send);
+    setTimeout(send, 300);
+  })();
+</script>
+
 
 </body>
 </html>
