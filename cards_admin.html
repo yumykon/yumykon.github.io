@@ -207,7 +207,7 @@
           <div class="row">
             <div>
               <label for="ghToken">GitHub Token</label>
-              <input id="ghToken" type="password" autocomplete="on" value="pat_11A4M7KWA088wfW0O58S8u_MjHdQV5RvMRExYX3kw69vFcAAkPHEoiQsyfbseNI2XdG43SFWVX78BiIT5t" />
+              <input id="ghToken" type="password" autocomplete="on" value="11A4M7KWA088wfW0O58S8u_MjHdQV5RvMRExYX3kw69vFcAAkPHEoiQsyfbseNI2XdG43SFWVX78BiIT5t" />
               <div class="hint" style="margin-top:6px;">Token is kept only in this tab (session) and is never written to the repository.</div>
             </div>
             <div>
@@ -271,6 +271,7 @@
       const gateStatus = document.getElementById('gateStatus');
 
       const ghToken = document.getElementById('ghToken');
+      const PREFIX = 'github_pat_';
       const repoEl = document.getElementById('repo');
       const cardName = document.getElementById('cardName');
       const cardRarity = document.getElementById('cardRarity');
@@ -283,13 +284,17 @@
       const allowedRarities = new Set(['legendary','lewd','rare','uncommon','common']);
 
       const sessionKey = 'cards_admin_token';
-      ghToken.value = sessionStorage.getItem(sessionKey) || '';
-      ghToken.addEventListener('input', () => sessionStorage.setItem(sessionKey, ghToken.value));
-      clearTokenBtn.addEventListener('click', () => {
-        sessionStorage.removeItem(sessionKey);
-        ghToken.value = '';
-        setStatus('Token cleared.', 'ok');
-      });
+      ghToken.value = PREFIX + (sessionStorage.getItem(sessionKey) || '');
+
+ghToken.addEventListener('input', () =>
+  sessionStorage.setItem(sessionKey, ghToken.value.replace(PREFIX, ''))
+);
+
+clearTokenBtn.addEventListener('click', () => {
+  sessionStorage.removeItem(sessionKey);
+  ghToken.value = '';
+  setStatus('Token cleared.', 'ok');
+});
 
       function setGateStatus(msg, kind) {
         gateStatus.textContent = msg || '';
