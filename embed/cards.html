@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cards Widget</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: system-ui, sans-serif;
+    }
+
+    .cards {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 20px;
+      box-sizing: border-box;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card img {
+      width: 100%;
+      display: block;
+    }
+
+    .label {
+      padding: 8px 10px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .rarity {
+      font-size: 11px;
+      opacity: .7;
+    }
+
+    /* modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="modal" id="modal">
+    <img id="modalImg">
+  </div>
+
+  <script>
+    fetch("/data/cards.json")
+      .then(r => r.json())
+      .then(data => {
+        const wrap = document.getElementById("cards");
+
+        if (!data.cards || !data.cards.length) {
+          wrap.innerHTML = '<div style="grid-column:1/-1;text-align:center;opacity:.6">No cards yet</div>';
+          return;
+        }
+
+        data.cards.forEach(card => {
+          const div = document.createElement("div");
+          div.className = "card";
+          div.innerHTML = `
+            <img src="/images/cards/${card.image}" alt="">
+            <div class="label">
+              ${card.name}
+              <div class="rarity">${card.rarity}</div>
+            </div>
+          `;
+
+          div.onclick = () => {
+            document.getElementById("modalImg").src = `/images/cards/${card.image}`;
+            document.getElementById("modal").style.display = "flex";
+          };
+
+          wrap.appendChild(div);
+        });
+      });
+
+    document.getElementById("modal").onclick = () => {
+      document.getElementById("modal").style.display = "none";
+    };
+  </script>
+
+  <!-- auto resize -->
+  <script>
+    (function () {
+      const PARENT = "https://yumykon.com";
+      const TYPE = "yumykon:resize";
+
+      function height() {
+        return Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        );
+      }
+
+      function send() {
+        window.parent.postMessage({ type: TYPE, height: height() }, PARENT);
+      }
+
+      new ResizeObserver(send).observe(document.documentElement);
+      window.addEventListener("load", send);
+    })();
+  </script>
+
+</body>
+</html>

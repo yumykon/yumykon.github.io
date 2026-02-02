@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kofi Widget</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .kofi-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      text-decoration: none;
+      color: #000;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform .2s;
+    }
+
+    .product:hover {
+      transform: translateY(-4px);
+    }
+
+    .product img {
+      width: 100%;
+      display: block;
+    }
+
+    .info {
+      padding: 10px 12px 14px;
+      font-size: 14px;
+    }
+
+    .price {
+      display: block;
+      color: #6c63ff;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #666;
+      padding: 40px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="kofi-container" id="kofi"></div>
+
+  <script>
+    fetch("/data/kofi_newproducts.json")
+      .then(r => r.json())
+      .then(data => {
+        const wrap = document.getElementById("kofi");
+
+        if (!data.active) {
+          wrap.innerHTML = '<div class="empty">Shop temporarily unavailable</div>';
+          return;
+        }
+
+        data.items.slice(0, 8).forEach(item => {
+          const a = document.createElement("a");
+          a.className = "product";
+          a.href = item.url;
+          a.target = "_blank";
+          a.rel = "noopener";
+
+          a.innerHTML = `
+            <img src="${item.image}" alt="">
+            <div class="info">
+              ${item.title}
+              <span class="price">${item.price}</span>
+            </div>
+          `;
+          wrap.appendChild(a);
+        });
+      });
+  </script>
+
+  <!-- auto resize -->
+  <script>
+    (function () {
+      const PARENT = "https://yumykon.com";
+      const TYPE = "yumykon:resize";
+
+      function height() {
+        return Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        );
+      }
+
+      function send() {
+        window.parent.postMessage({ type: TYPE, height: height() }, PARENT);
+      }
+
+      new ResizeObserver(send).observe(document.documentElement);
+      window.addEventListener("load", send);
+    })();
+  </script>
+
+</body>
+</html>
