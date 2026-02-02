@@ -1,6 +1,13 @@
 {
-  "updated_at": "2026-02-01T18:46:18.571Z",
+  "updated_at": "2026-02-02T06:07:46.051Z",
   "cards": [
+    {
+      "id": "cosmic-satomi-1770012464635",
+      "name": "Cosmic Satomi",
+      "rarity": "legendary",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc euismod augue sed nunc scelerisque, eget bibendum magna convallis. Sed vitae commodo ligula. Proin vel libero luctus, sollicitudin dui efficitur, tempus sem. Etiam finibus urna et tellus dapibus, vitae consectetur diam tristique. Suspendisse finibus nulla eget ultricies gravida. Nullam eu eros ut ipsum vulputate interdum varius eu ex. Aliquam eget nisl sit amet diam consectetur posuere. Vivamus eget eleifend augue. Vivamus interdum metus vel tortor tristique, vitae lobortis lorem bibendum. Mauris accumsan vehicula purus quis convallis. Vivamus tincidunt vehicula mauris, sit amet sodales augue maximus sit amet. Aliquam erat volutpat. Nunc quis augue vulputate, congue urna sed, laoreet quam. Vestibulum et sapien non nisl facilisis ornare id at ante.",
+      "image": "images/cards/cosmic-satomi-1770012464635.png"
+    },
     {
       "id": "goddess-netsu-1769971577209",
       "name": "Goddess Netsu",
