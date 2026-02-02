@@ -16,6 +16,8 @@
       --accent: #6c63ff;
     }
 
+    * { box-sizing: border-box; }
+
     html, body{
       margin:0;
       padding:0;
@@ -28,7 +30,6 @@
       max-width: 1100px;
       margin: 0 auto;
       padding: 18px;
-      box-sizing: border-box;
     }
 
     .panel{
@@ -76,7 +77,6 @@
 
     .search input{
       width: 100%;
-      box-sizing: border-box;
       padding: 9px 10px;
       border-radius: 12px;
       border: 1px solid var(--border);
@@ -133,9 +133,11 @@
       background: #fff;
       cursor: pointer;
       transition: transform .15s, box-shadow .15s;
+      outline: none;
     }
 
-    .card:hover{
+    .card:hover,
+    .card:focus-visible{
       transform: translateY(-2px);
       box-shadow: 0 10px 20px rgba(0,0,0,.10);
     }
@@ -207,14 +209,13 @@
       align-items: center;
       justify-content: center;
       padding: 18px;
-      box-sizing: border-box;
       z-index: 9999;
     }
 
     .modal[data-open="true"]{ display:flex; }
 
     .modal-inner{
-      width: min(900px, 100%);
+      width: min(980px, 100%);
       max-height: 92vh;
       background: #101010;
       border-radius: 16px;
@@ -249,30 +250,96 @@
       border: 0;
       background: rgba(255,255,255,.10);
       color: #fff;
-      border-radius: 10px;
-      padding: 6px 10px;
+      border-radius: 12px;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
       cursor: pointer;
-      font-weight: 700;
-      font-size: 12px;
+      font-weight: 800;
+      font-size: 18px;
+      line-height: 1;
     }
 
     .close:hover{ background: rgba(255,255,255,.18); }
+    .close:focus-visible{ outline: 2px solid rgba(108,99,255,.7); outline-offset: 2px; }
 
     .modal-body{
+      display:grid;
+      grid-template-columns: 1.25fr .9fr;
+      gap: 0;
+      background:#0b0b0b;
+      flex:1;
+      min-height: 0;
+    }
+
+    @media (max-width: 820px){
+      .modal-body{ grid-template-columns: 1fr; }
+    }
+
+    .modal-media{
       display:flex;
       align-items:center;
       justify-content:center;
-      background:#0b0b0b;
-      flex:1;
+      padding: 12px;
+      min-height: 0;
     }
 
-    .modal-body img{
+    .modal-media img{
       width: 100%;
       height: 100%;
       object-fit: contain;
       max-height: 82vh;
       display:block;
+      border-radius: 12px;
     }
+
+    .modal-info{
+      border-left: 1px solid rgba(255,255,255,.08);
+      padding: 14px;
+      color: rgba(255,255,255,.92);
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+      overflow: auto;
+    }
+
+    @media (max-width: 820px){
+      .modal-info{ border-left: 0; border-top: 1px solid rgba(255,255,255,.08); }
+    }
+
+    .modal-badges{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      font-size: 12px;
+      color: rgba(255,255,255,.92);
+      white-space: nowrap;
+    }
+
+    .badge .dot{ opacity: 1; }
+
+    .desc{
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.82);
+      white-space: pre-wrap;
+    }
+
+    .desc[data-empty="true"]{ color: rgba(255,255,255,.55); }
 
     /* reduced motion */
     @media (prefers-reduced-motion: reduce){
@@ -299,13 +366,24 @@
   </div>
 
   <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal-inner" role="dialog" aria-modal="true" aria-label="Card preview">
+    <div class="modal-inner" id="modalInner" role="dialog" aria-modal="true" aria-label="Card preview">
       <div class="modal-top">
         <div class="modal-title" id="modalTitle">Card</div>
-        <button class="close" id="closeBtn" type="button">Close</button>
+        <button class="close" id="closeBtn" type="button" aria-label="Close">×</button>
       </div>
       <div class="modal-body">
-        <img id="modalImg" alt="" />
+        <div class="modal-media">
+          <img id="modalImg" alt="" />
+        </div>
+        <div class="modal-info">
+          <div class="modal-badges">
+            <span class="badge" id="modalRarityBadge">
+              <span class="dot" id="modalRarityDot"></span>
+              <span id="modalRarityText">Rarity</span>
+            </span>
+          </div>
+          <p class="desc" id="modalDesc" data-empty="true">No description.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -331,12 +409,16 @@
     const elChips = document.getElementById("chips");
 
     const elModal = document.getElementById("modal");
+    const elModalInner = document.getElementById("modalInner");
     const elModalImg = document.getElementById("modalImg");
     const elModalTitle = document.getElementById("modalTitle");
     const elCloseBtn = document.getElementById("closeBtn");
+    const elModalDesc = document.getElementById("modalDesc");
+    const elModalRarityDot = document.getElementById("modalRarityDot");
+    const elModalRarityText = document.getElementById("modalRarityText");
 
     function rarityDotColor(r){
-      switch(String(r||"").toLowerCase()){
+      switch(String(r||"").trim().toLowerCase()){
         case "legendary": return "#ffb703";
         case "lewd": return "#ff4d8d";
         case "rare": return "#4da3ff";
@@ -350,7 +432,8 @@
       return String(s||"")
         .toLowerCase()
         .normalize("NFD")
-        .replace(/\p{Diacritic}/gu, "");
+        .replace(/\p{Diacritic}/gu, "")
+        .trim();
     }
 
     // Avoid double paths when JSON already includes "images/cards/..." etc.
@@ -389,12 +472,44 @@
 
     function filterCards(){
       const qn = normalize(query);
+      const activeNorm = normalize(activeRarity);
+
       return allCards.filter(c => {
-        const rOk = (activeRarity === "All") || (String(c.rarity||"") === activeRarity);
+        const rarityNorm = normalize(c.rarity);
+        const rOk = (activeNorm === "all") || (rarityNorm === activeNorm);
         if(!rOk) return false;
         if(!qn) return true;
         return normalize(c.name).includes(qn);
       });
+    }
+
+    function openModal(c, imgUrl){
+      elModal.dataset.open = "true";
+      elModal.setAttribute("aria-hidden", "false");
+
+      const rarityLabel = String(c.rarity || "").trim();
+      elModalTitle.textContent = `${c.name}${rarityLabel ? " • " + rarityLabel : ""}`;
+
+      elModalImg.src = imgUrl;
+      elModalImg.alt = c.name;
+
+      elModalRarityDot.style.background = rarityDotColor(c.rarity);
+      elModalRarityText.textContent = rarityLabel || "Unknown";
+
+      const desc = String(c.description || "").trim();
+      if(desc){
+        elModalDesc.textContent = desc;
+        elModalDesc.dataset.empty = "false";
+      } else {
+        elModalDesc.textContent = "No description.";
+        elModalDesc.dataset.empty = "true";
+      }
+
+      // lock scroll inside iframe
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+
+      window.__sendResize && window.__sendResize(true);
     }
 
     function render(){
@@ -419,16 +534,7 @@
           </div>
         `;
 
-        function open(){
-          elModal.dataset.open = "true";
-          elModal.setAttribute("aria-hidden", "false");
-          elModalTitle.textContent = `${c.name} • ${c.rarity || ""}`.trim();
-          elModalImg.src = imgUrl;
-          elModalImg.alt = c.name;
-          // lock scroll inside iframe
-          document.documentElement.style.overflow = "hidden";
-          document.body.style.overflow = "hidden";
-        }
+        const open = () => openModal(c, imgUrl);
 
         card.addEventListener("click", open);
         card.addEventListener("keydown", (e) => {
@@ -454,10 +560,16 @@
       window.__sendResize && window.__sendResize(true);
     }
 
+    // Close button
     elCloseBtn.addEventListener("click", closeModal);
-    elModal.addEventListener("click", (e) => {
-      if(e.target === elModal) closeModal();
+
+    // Close by clicking outside the dialog (anywhere on the dark overlay)
+    elModal.addEventListener("mousedown", (e) => {
+      if(elModal.dataset.open !== "true") return;
+      if(!elModalInner.contains(e.target)) closeModal();
     });
+
+    // Escape closes
     window.addEventListener("keydown", (e) => {
       if(e.key === "Escape" && elModal.dataset.open === "true") closeModal();
     });
@@ -481,8 +593,9 @@
           .filter(x => x && x.image)
           .map(x => ({
             name: x.name || x.title || "Untitled",
-            rarity: x.rarity || "",
-            image: x.image
+            rarity: String(x.rarity || "").trim(),
+            image: x.image,
+            description: (x.description ?? x.desc ?? x.text ?? "")
           }));
 
         render();
