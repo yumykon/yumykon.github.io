@@ -127,19 +127,29 @@
     }
 
     .card{
+      --rx: 0deg;
+      --ry: 0deg;
+      --tx: 0px;
+      --ty: 0px;
+      --lift: 0px;
+
       border: 1px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
       background: #fff;
       cursor: pointer;
-      transition: transform .15s, box-shadow .15s;
       outline: none;
+
+      transform: translate3d(var(--tx), calc(var(--ty) + var(--lift)), 0) rotateX(var(--rx)) rotateY(var(--ry));
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform .15s, box-shadow .15s;
     }
 
     .card:hover,
     .card:focus-visible{
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(0,0,0,.10);
+      --lift: -4px;
+      box-shadow: 0 12px 26px rgba(0,0,0,.12);
     }
 
     .thumb{
@@ -344,6 +354,7 @@
     /* reduced motion */
     @media (prefers-reduced-motion: reduce){
       .card, .chip { transition: none; }
+      .card{ transform: none; }
     }
   </style>
 </head>
@@ -535,6 +546,59 @@
         `;
 
         const open = () => openModal(c, imgUrl);
+
+        // --- subtle "follow the mouse" tilt ---
+        const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        let raf = 0;
+        let last = null;
+
+        function applyTilt(){
+          raf = 0;
+          if(!last) return;
+          const { nx, ny } = last;
+
+          // tune these values to taste
+          const maxRot = 8;      // degrees
+          const maxMove = 3;     // px
+
+          const ry = (nx * maxRot).toFixed(2);
+          const rx = (-ny * maxRot).toFixed(2);
+          const tx = (nx * maxMove).toFixed(2);
+          const ty = (ny * maxMove).toFixed(2);
+
+          card.style.setProperty("--ry", `${ry}deg`);
+          card.style.setProperty("--rx", `${rx}deg`);
+          card.style.setProperty("--tx", `${tx}px`);
+          card.style.setProperty("--ty", `${ty}px`);
+        }
+
+        function onMove(e){
+          if(reduceMotion) return;
+          // only for mouse/pen; touch feels weird
+          if(e.pointerType && e.pointerType === "touch") return;
+
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width;   // 0..1
+          const y = (e.clientY - rect.top) / rect.height;   // 0..1
+          const nx = (x - 0.5) * 2; // -1..1
+          const ny = (y - 0.5) * 2; // -1..1
+
+          last = { nx, ny };
+          if(!raf) raf = requestAnimationFrame(applyTilt);
+        }
+
+        function onLeave(){
+          last = null;
+          if(raf){ cancelAnimationFrame(raf); raf = 0; }
+          card.style.setProperty("--rx", "0deg");
+          card.style.setProperty("--ry", "0deg");
+          card.style.setProperty("--tx", "0px");
+          card.style.setProperty("--ty", "0px");
+        }
+
+        card.addEventListener("pointermove", onMove);
+        card.addEventListener("pointerleave", onLeave);
+        card.addEventListener("blur", onLeave);
 
         card.addEventListener("click", open);
         card.addEventListener("keydown", (e) => {
