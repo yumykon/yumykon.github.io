@@ -6,156 +6,55 @@
     <title>Yumyverse Collectible Cards</title>
     <meta name="description" content="Yumyverse collectible cards gallery." />
 
+    <link href="https://fonts.googleapis.com/css2?family=Gabarito&display=swap" rel="stylesheet">
+
     <style>
       :root {
-        --bg: #070718;
-        --panel: #ffffff;
-        --text: #1a1a1a;
-        --muted: #4b4b4b;
+        --bg: transparent;
+        --panel: transparent;
+        --text: #ffffff;
+        --muted: rgba(255,255,255,0.72);
         --accent: #7a62ff;
         --accent-2: #ff66b8;
         --shadow: rgba(0, 0, 0, 0.18);
-        --radius: 56px;
+        --radius: 0px;
       }
 
       * { box-sizing: border-box; }
       html, body { height: 100%; }
+
+      /* iframe-first: transparent page, no outer padding, no forced background */
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        font-family: 'Gabarito', sans-serif;
-        background: url('images/background-stars.png') center center repeat;
-        background-size: cover;
+        font-family: 'Gabarito', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background: transparent;
         color: #fff;
       }
 
-            /* site header (same vibe as index.html) */
-      .site-header {
-        background: #fff;
-        padding: 14px 0;
-        text-align: center;
-      }
-
-      .site-nav {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        font-size: 13px;
-      }
-
-      .site-nav a {
-        color: #B45AD3;
-        text-decoration: none;
-        letter-spacing: -0.025em;
-        line-height: 1.625;
-        padding: 0 15px;
-        position: relative;
-        transition: color 0.3s;
-      }
-
-      .site-nav a:not(:last-child)::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        height: 22px;
-        border-right: 1px solid #B45AD3;
-      }
-
-      .site-nav a:hover {
-        color: #562966;
-      }
-
       .wrap {
+        width: 100%;
         min-height: 100%;
-        padding: 36px 18px 80px;
-        display: flex;
-        justify-content: center;
+        padding: 0;
+        display: block;
       }
 
       .panel {
-        width: min(980px, 100%);
-        background: var(--panel);
-        border-radius: var(--radius);
-        box-shadow: 0 24px 70px var(--shadow);
-        padding: 40px 48px 52px;
-      }
-
-      .top {
-        display: grid;
-        place-items: center;
-        text-align: center;
-        gap: 16px;
-      }
-
-      .logo {
-        width: min(520px, 100%);
-        height: auto;
-        image-rendering: auto;
-      }
-
-      .intro {
-        width: min(680px, 100%);
-        font-size: 14px;
-        line-height: 1.55;
-        color: var(--text);
-      }
-
-      .intro p { margin: 10px 0; }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        padding: 12px 22px;
-        border-radius: 999px;
-        border: 2px solid rgba(122, 98, 255, 0.55);
-        background: #fff;
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 14px;
-        transition: transform 0.08s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      }
-
-      .btn:hover {
-        transform: translateY(-1px);
-        border-color: rgba(122, 98, 255, 0.8);
-        box-shadow: 0 10px 26px rgba(122, 98, 255, 0.18);
-      }
-
-      .section-title {
-        margin: 34px 0 22px;
-        display: grid;
-        place-items: center;
-        text-align: center;
-        gap: 10px;
-      }
-
-      .section-title h2 {
-        margin: 0;
-        font-size: 26px;
-        letter-spacing: 0.2px;
-      }
-
-      .section-title .decor {
-        font-size: 12px;
-        color: var(--muted);
-        letter-spacing: 2px;
-        user-select: none;
+        width: 100%;
+        background: transparent;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px;
       }
 
       .gallery {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 18px;
-        padding: 6px 0 0;
+        padding: 0;
       }
 
       @media (max-width: 900px) {
-        .panel { padding: 34px 26px 44px; border-radius: 42px; }
+        .panel { padding: 16px; }
         .gallery { grid-template-columns: repeat(3, 1fr); }
       }
 
@@ -164,7 +63,7 @@
       }
 
       @media (max-width: 420px) {
-        .panel { padding: 28px 18px 38px; border-radius: 34px; }
+        .panel { padding: 14px; }
         .gallery { grid-template-columns: 1fr; }
       }
 
@@ -172,15 +71,15 @@
         position: relative;
         border-radius: 18px;
         overflow: hidden;
-        background: #f3f3f8;
-        box-shadow: 0 12px 26px rgba(0,0,0,0.12);
+        background: rgba(255,255,255,0.10);
+        box-shadow: 0 12px 26px rgba(0,0,0,0.22);
         cursor: pointer;
         transition: transform 0.12s ease, box-shadow 0.22s ease;
       }
 
       .card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 18px 38px rgba(0,0,0,0.18);
+        box-shadow: 0 18px 38px rgba(0,0,0,0.28);
       }
 
       .card img {
@@ -204,6 +103,7 @@
         color: #333;
         text-transform: uppercase;
         letter-spacing: 0.6px;
+        user-select: none;
       }
 
       .badge.legendary { border-color: rgba(255,159,67,0.55); color: #b35c00; }
@@ -278,6 +178,7 @@
       .modal-title {
         margin: 0;
         font-size: 22px;
+        color: #111;
       }
 
       .modal-close {
@@ -293,7 +194,7 @@
 
       .modal-desc {
         margin: 0;
-        color: var(--muted);
+        color: #4b4b4b;
         font-size: 14px;
         line-height: 1.6;
         white-space: pre-wrap;
@@ -317,87 +218,9 @@
       }
 
       .chip.rarity { background: rgba(255, 102, 184, 0.12); color: #c2006f; }
-
-      .site-nav {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        font-size: 13px;
-      }
-
-      .site-nav a {
-        color: #B45AD3;
-        text-decoration: none;
-        letter-spacing: -0.025em;
-        line-height: 1.625;
-        padding: 0 15px;
-        position: relative;
-        transition: color 0.3s;
-      }
-
-      .site-nav a:not(:last-child)::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        height: 22px;
-        border-right: 1px solid #B45AD3;
-      }
-
-      .site-nav a:hover {
-        color: #562966;
-      }
-
-      /* global planet+logo block (container01) */
-      #container01 {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        margin: 0;
-      }
-
-      #container01 .wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 1400px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      #container01 .background-under-logo {
-        width: 66%;
-        max-width: 1400px;
-        height: auto;
-        display: block;
-      }
-
-      #container01 .image a.frame img {
-        width: 316px;
-        height: auto;
-        position: absolute;
-        top: 37%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-
-      /* keep the white panel from sticking to the planet */
-      .wrap {
-        padding-top: 22px; /* was 36px; adjust if you want more/less */
-      }
-
-      /* responsive tweaks */
-      @media (max-width: 720px) {
-        #container01 .background-under-logo { width: 100%; }
-        #container01 .image a.frame img { width: 240px; top: 40%; }
-      }
-
     </style>
   </head>
-  <link href="https://fonts.googleapis.com/css2?family=Gabarito&display=swap" rel="stylesheet">
+
   <body>
     <div class="wrap">
       <main class="panel">
@@ -430,10 +253,6 @@
     <script>
       const DATA_URL = 'data/cards.json';
 
-      // Optional: set your real Cards Club link here
-      const CARDS_CLUB_LINK = 'https://yumykon.com/#cardsclub';
-      document.getElementById('cardsClubBtn').href = CARDS_CLUB_LINK;
-
       const grid = document.getElementById('cardsGrid');
       const emptyEl = document.getElementById('cardsEmpty');
 
@@ -444,7 +263,7 @@
       const modalDesc = document.getElementById('modalDesc');
       const modalClose = document.getElementById('modalClose');
 
-      const allowedRarities = new Set(['legendary','lewd','rare','uncommon','common']);
+      const allowedRarities = new Set(['legendary', 'lewd', 'rare', 'uncommon', 'common']);
       const niceRarity = (r) => {
         const v = (r || 'common').toLowerCase();
         const map = { legendary: 'Legendary', lewd: 'Lewd', rare: 'Rare', uncommon: 'Uncommon', common: 'Common' };
@@ -477,6 +296,14 @@
         if (e.key === 'Escape') closeModal();
       });
 
+      function escapeAttr(s) {
+        return String(s || '')
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
       function render(cards) {
         grid.innerHTML = '';
         if (!cards.length) {
@@ -486,13 +313,16 @@
         emptyEl.style.display = 'none';
 
         for (const c of cards) {
-          const rarity = allowedRarities.has((c.rarity || '').toLowerCase()) ? (c.rarity || 'common').toLowerCase() : 'common';
+          const raw = (c.rarity || 'common').toLowerCase();
+          const rarity = allowedRarities.has(raw) ? raw : 'common';
+
           const el = document.createElement('div');
           el.className = 'card';
           el.innerHTML = `
             <span class="badge ${rarity}">${niceRarity(rarity)}</span>
-            <img src="${c.image}" alt="${(c.name || 'Card').replace(/\"/g, '&quot;')}" loading="lazy" />
+            <img src="${escapeAttr(c.image)}" alt="${escapeAttr(c.name || 'Card')}" loading="lazy" />
           `;
+
           el.addEventListener('click', () => openModal({
             id: c.id,
             name: c.name || 'Card',
@@ -500,6 +330,7 @@
             description: c.description || '',
             image: c.image
           }));
+
           grid.appendChild(el);
         }
       }
