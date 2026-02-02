@@ -12,7 +12,7 @@
       --muted: rgba(0,0,0,.55);
       --border: rgba(0,0,0,.10);
       --shadow: 0 10px 22px rgba(0,0,0,.12);
-      --radius: 18px;
+      --radius: 40px;
       --accent: #6c63ff;
     }
 
@@ -134,13 +134,14 @@
       --lift: 0px;
 
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 40px;
       overflow: hidden;
       background: #fff;
       cursor: pointer;
       outline: none;
 
-      transform: translate3d(var(--tx), calc(var(--ty) + var(--lift)), 0) rotateX(var(--rx)) rotateY(var(--ry));
+      transform: translate3d(var(--tx), calc(var(--ty) + var(--lift)), 0)
+                 rotateX(var(--rx)) rotateY(var(--ry));
       transform-style: preserve-3d;
       will-change: transform;
       transition: transform .15s, box-shadow .15s;
@@ -152,7 +153,109 @@
       box-shadow: 0 12px 26px rgba(0,0,0,.12);
     }
 
+    /* rarity visual effects (MODAL ONLY) */
+    .modal-fx{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      mix-blend-mode: overlay;
+      border-radius: 40px;
+    }
+
+    .modal-fx.holo{
+      /* Lewd: pink/red foil with lust/heart vibe */
+      background:
+        /* moving pink-red sheen */
+        linear-gradient(120deg,
+          rgba(255, 40, 120, .45),
+          rgba(255, 90, 90, .35),
+          rgba(255, 0, 120, .45),
+          rgba(255, 40, 120, .45)),
+        /* subtle light sweep */
+        linear-gradient(135deg,
+          rgba(255,255,255,.18),
+          rgba(255,255,255,0) 60%);
+      background-size: 400% 400%, 200% 200%;
+      animation: lewdSheen 6s linear infinite;
+    }
+
+    /* outlined translucent hearts overlay */
+    .modal-fx.holo::after{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      pointer-events:none;
+      /* SVG hearts (outline only) tiled */
+      background-color: rgba(255,60,140,.45);
+      mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><path d='M60 95 C20 65,10 40,30 25 C45 15,60 30,60 30 C60 30,75 15,90 25 C110 40,100 65,60 95 Z' fill='none' stroke='white' stroke-width='10' stroke-linejoin='round'/></svg>");
+      mask-size: 120px 120px;
+      mask-repeat: repeat;
+      mix-blend-mode: screen;
+      /* rotate hearts to match diagonal drift */
+      transform: rotate(45deg) scale(1.35);
+      transform-origin: 50% 50%;
+      animation: heartsDrift 10s linear infinite;
+      opacity: .65;
+    }
+
+    @keyframes lewdShift{
+      0%{
+        background-position: 0 0, 0% 50%;
+      }
+      50%{
+        background-position: 140px 140px, 100% 50%;
+      }
+      100%{
+        background-position: 280px 280px, 0% 50%;
+      }
+    }
+
+    .modal-fx.foil{
+      background: linear-gradient(135deg,
+        rgba(255,255,255,.35),
+        rgba(180,180,180,.15),
+        rgba(255,255,255,.35));
+    }
+
+    .modal-fx.poly{
+      /* Balatro-ish Polychrome: moving rainbow sheen (smooth loop) */
+      background: conic-gradient(
+        from 0deg,
+        #ff0000, #ff7f00, #ffff00, #00ff00,
+        #0000ff, #4b0082, #9400d3, #ff0000
+      );
+      transform: scale(1.35) rotate(0deg);
+      transform-origin: 50% 50%;
+
+      /* mais lento */
+      animation: polySpin 6s linear infinite;
+
+      /* mais opaco */
+      mix-blend-mode: overlay;
+      opacity: .45;
+    }
+
+
+    @keyframes lewdSheen{
+      0%{ background-position: 0% 50%, 0% 0%; }
+      50%{ background-position: 100% 50%, 100% 100%; }
+      100%{ background-position: 0% 50%, 0% 0%; }
+    }
+
+    @keyframes heartsDrift{
+      0%{ transform: translate3d(0,0,0) scale(1); }
+      100%{ transform: translate3d(-120px,120px,0) scale(1.05); }
+      50%{ background-position: 100% 50%; }
+      100%{ background-position: 0% 50%; }
+    }
+    @keyframes polySpin{
+      0%   { transform: scale(2) rotate(0deg); }
+      100% { transform: scale(2) rotate(360deg); }
+    }
+
+
     .thumb{
+      position: relative;
       width: 100%;
       aspect-ratio: 3 / 4;
       background: #f4f4f4;
@@ -295,13 +398,54 @@
       min-height: 0;
     }
 
-    .modal-media img{
+    .modal-card-tilt{
+      --mrx: 0deg;
+      --mry: 0deg;
+      --mx: 0px;
+      --my: 0px;
+
+      width: 100%;
+      height: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      transform-style: preserve-3d;
+      will-change: transform;
+      transform: translate3d(var(--mx), var(--my), 0) rotateX(var(--mrx)) rotateY(var(--mry));
+      transition: transform 120ms ease;
+
+      pointer-events: auto; /* must receive hover/move */
+    }
+
+    .modal-card-float{
+      border-radius: 40px;
+      box-sizing: border-box;
+      overflow: hidden; /* clip overlay to rounded corners */
+      width: min(520px, 100%);
+      height: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      animation: modalFloat 3.6s ease-in-out infinite;
+      animation-play-state: running; /* always floating */
+      pointer-events: none;
+    }
+
+    @keyframes modalFloat{
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .modal-card-float img{
       width: 100%;
       height: 100%;
       object-fit: contain;
       max-height: 82vh;
       display:block;
-      border-radius: 12px;
+      border-radius: 40px;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,.55));
+      pointer-events: none;
     }
 
     .modal-info{
@@ -355,6 +499,8 @@
     @media (prefers-reduced-motion: reduce){
       .card, .chip { transition: none; }
       .card{ transform: none; }
+      .modal-card-tilt{ transition: none; transform: none; }
+      .modal-card-float{ animation: none; }
     }
   </style>
 </head>
@@ -384,7 +530,12 @@
       </div>
       <div class="modal-body">
         <div class="modal-media">
-          <img id="modalImg" alt="" />
+          <div class="modal-card-tilt" id="modalCardTilt" aria-hidden="true">
+            <div class="modal-card-float" id="modalCardFloat">
+              <img id="modalImg" alt="" />
+              <div id="modalFx" class="modal-fx" aria-hidden="true"></div>
+            </div>
+          </div>
         </div>
         <div class="modal-info">
           <div class="modal-badges">
@@ -423,6 +574,9 @@
     const elModalInner = document.getElementById("modalInner");
     const elModalImg = document.getElementById("modalImg");
     const elModalTitle = document.getElementById("modalTitle");
+    const elModalCardTilt = document.getElementById("modalCardTilt");
+    const elModalCardFloat = document.getElementById("modalCardFloat");
+    const elModalFx = document.getElementById("modalFx");
     const elCloseBtn = document.getElementById("closeBtn");
     const elModalDesc = document.getElementById("modalDesc");
     const elModalRarityDot = document.getElementById("modalRarityDot");
@@ -507,6 +661,15 @@
       elModalRarityDot.style.background = rarityDotColor(c.rarity);
       elModalRarityText.textContent = rarityLabel || "Unknown";
 
+      // Balatro-ish rarity overlay (modal only)
+      if(elModalFx){
+        elModalFx.className = "modal-fx";
+        const r = normalize(c.rarity);
+        if(r === "lewd") elModalFx.classList.add("holo");
+        else if(r === "rare") elModalFx.classList.add("foil");
+        else if(r === "legendary") elModalFx.classList.add("poly");
+      }
+
       const desc = String(c.description || "").trim();
       if(desc){
         elModalDesc.textContent = desc;
@@ -516,12 +679,96 @@
         elModalDesc.dataset.empty = "true";
       }
 
+      // enable modal FX
+      enableModalFX();
+
       // lock scroll inside iframe
       document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
 
       window.__sendResize && window.__sendResize(true);
     }
+
+    // --- modal FX: tilt + float on the opened card ---
+    const reduceMotionGlobal = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let modalFxOn = false;
+    let modalRAF = 0;
+    let modalLast = null;
+
+    function setModalVars(nx, ny){
+      // tune to taste
+      const maxRot = 10;   // degrees
+      const maxMove = 10;  // px
+
+      const ry = (nx * maxRot).toFixed(2);
+      const rx = (-ny * maxRot).toFixed(2);
+      const mx = (nx * maxMove).toFixed(2);
+      const my = (ny * maxMove).toFixed(2);
+
+      elModalCardTilt.style.setProperty("--mry", `${ry}deg`);
+      elModalCardTilt.style.setProperty("--mrx", `${rx}deg`);
+      elModalCardTilt.style.setProperty("--mx", `${mx}px`);
+      elModalCardTilt.style.setProperty("--my", `${my}px`);
+    }
+
+    function modalApply(){
+      modalRAF = 0;
+      if(!modalFxOn || !modalLast) return;
+      setModalVars(modalLast.nx, modalLast.ny);
+    }
+
+    function onModalMove(e){
+      if(!modalFxOn || reduceMotionGlobal) return;
+      if(e.pointerType && e.pointerType === "touch") return;
+
+      const rect = elModalCardTilt.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      const nx = (x - 0.5) * 2;
+      const ny = (y - 0.5) * 2;
+
+      modalLast = { nx, ny };
+      if(!modalRAF) modalRAF = requestAnimationFrame(modalApply);
+    }
+
+    function resetModalFX(){
+      modalLast = null;
+      if(modalRAF){ cancelAnimationFrame(modalRAF); modalRAF = 0; }
+      if(elModalCardTilt){
+        elModalCardTilt.style.setProperty("--mrx", "0deg");
+        elModalCardTilt.style.setProperty("--mry", "0deg");
+        elModalCardTilt.style.setProperty("--mx", "0px");
+        elModalCardTilt.style.setProperty("--my", "0px");
+      }
+    }
+
+    function enableModalFX(){
+      // float always while modal is open
+      if(elModalCardFloat) elModalCardFloat.style.animationPlayState = "running";
+
+      // mouse-follow tilt only on hover
+      modalFxOn = false;
+      resetModalFX();
+    }
+
+    function disableModalFX(){
+      modalFxOn = false;
+      resetModalFX();
+      if(elModalCardFloat) elModalCardFloat.style.animationPlayState = "paused";
+    }
+
+    // track mouse ONLY when hovering the card in the modal
+    elModalCardTilt.addEventListener("pointerenter", () => {
+      if(reduceMotionGlobal) return;
+      modalFxOn = true; // enable ONLY mouse-follow
+    });
+
+    elModalCardTilt.addEventListener("pointermove", onModalMove);
+
+    elModalCardTilt.addEventListener("pointerleave", () => {
+      modalFxOn = false; // pause mouse-follow
+      resetModalFX();
+    });
 
     function render(){
       const list = filterCards();
@@ -619,6 +866,10 @@
       elModal.dataset.open = "false";
       elModal.setAttribute("aria-hidden", "true");
       elModalImg.src = "";
+      if(elModalFx) elModalFx.className = "modal-fx";
+
+      disableModalFX();
+
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
       window.__sendResize && window.__sendResize(true);
