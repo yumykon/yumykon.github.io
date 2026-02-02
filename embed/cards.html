@@ -312,8 +312,10 @@
 
   <script>
     // ---------- config ----------
-    const DATA_URL = "/data/cards.json";
-    const IMG_BASE = "/images/cards/";
+    // Paths: this file lives at /embed/cards.html
+    // Use ../ so it works on GitHub Pages (and avoids double /images/cards/)
+    const DATA_URL = "../data/cards.json";
+    const IMG_BASE = "../images/cards/";
 
     const RARITIES = ["All", "Legendary", "Lewd", "Rare", "Uncommon", "Common"]; // order matters
 
@@ -349,6 +351,20 @@
         .toLowerCase()
         .normalize("NFD")
         .replace(/\p{Diacritic}/gu, "");
+    }
+
+    // Avoid double paths when JSON already includes "images/cards/..." etc.
+    function resolveImageUrl(image){
+      const raw = String(image || "").trim();
+      if(!raw) return "";
+      // absolute URLs
+      if(/^https?:\/\//i.test(raw)) return raw;
+      // already an absolute path
+      if(raw.startsWith("/")) return raw;
+      // already a relative path
+      if(raw.startsWith("images/") || raw.startsWith("../") || raw.startsWith("./")) return raw;
+      // default: treat as filename under IMG_BASE
+      return IMG_BASE + raw;
     }
 
     function buildChips(){
@@ -391,7 +407,7 @@
         card.className = "card";
         card.tabIndex = 0;
 
-        const imgUrl = IMG_BASE + c.image;
+        const imgUrl = resolveImageUrl(c.image);
 
         card.innerHTML = `
           <div class="thumb">
@@ -408,6 +424,7 @@
           elModal.setAttribute("aria-hidden", "false");
           elModalTitle.textContent = `${c.name} • ${c.rarity || ""}`.trim();
           elModalImg.src = imgUrl;
+          elModalImg.alt = c.name;
           // lock scroll inside iframe
           document.documentElement.style.overflow = "hidden";
           document.body.style.overflow = "hidden";
