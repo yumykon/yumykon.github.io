@@ -7,171 +7,194 @@
     <meta name="robots" content="noindex, nofollow" />
 
     <style>
-      :root {
-        --bg: #070718;
-        --panel: #ffffff;
-        --text: #1a1a1a;
-        --muted: #4b4b4b;
-        --accent: #7a62ff;
-        --danger: #d83144;
-        --ok: #1f9d55;
-        --shadow: rgba(0, 0, 0, 0.18);
-        --radius: 40px;
+      :root{
+        --bg:#070718;
+        --panel:#ffffff;
+        --text:#141414;
+        --muted:#5a5a5a;
+        --accent:#7a62ff;
+        --danger:#d83144;
+        --ok:#1f9d55;
+
+        --shadow:rgba(0,0,0,.22);
+        --radius:28px;
+        --card:rgba(255,255,255,.92);
+        --stroke:rgba(0,0,0,.10);
       }
 
-      * { box-sizing: border-box; }
-      html, body { height: 100%; }
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        color: var(--text);
-        background: var(--bg) url("images/background-stars.png") repeat;
+      *{box-sizing:border-box}
+      html,body{height:100%}
+
+      body{
+        margin:0;
+        font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+        color:var(--text);
+        background:var(--bg) url("images/background-stars.png") repeat;
       }
 
-      .wrap {
-        min-height: 100%;
-        padding: 34px 18px 70px;
-        display: flex;
-        justify-content: center;
+      .wrap{
+        min-height:100%;
+        padding:28px 16px;
+        display:flex;
+        align-items:center;          /* vertical center */
+        justify-content:center;      /* horizontal center */
       }
 
-      .panel {
-        width: min(980px, 100%);
-        background: var(--panel);
-        border-radius: var(--radius);
-        box-shadow: 0 24px 70px var(--shadow);
-        padding: 34px 30px 34px;
+      .panel{
+        width:min(920px, 100%);
+        background:var(--panel);
+        border-radius:var(--radius);
+        box-shadow:0 28px 90px var(--shadow);
+        padding:26px;
       }
 
-      header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 14px;
-        flex-wrap: wrap;
+      header{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        flex-wrap:wrap;
+        padding:2px 2px 10px;
       }
 
-      h1 {
-        margin: 0;
-        font-size: 22px;
+      h1{
+        margin:0;
+        font-size:18px;
+        letter-spacing:.2px;
       }
 
-      .sub {
-        margin: 8px 0 0;
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.5;
+      .btn{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        padding:10px 14px;
+        border-radius:999px;
+        border:1px solid rgba(122,98,255,.55);
+        background:#fff;
+        color:var(--accent);
+        text-decoration:none;
+        font-weight:800;
+        font-size:13px;
+        cursor:pointer;
+        user-select:none;
       }
 
-      .row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
+      .btn.primary{
+        background:var(--accent);
+        color:#fff;
+        border-color:var(--accent);
       }
 
-      @media (max-width: 820px) {
-        .row { grid-template-columns: 1fr; }
+      .btn:disabled{
+        opacity:.6;
+        cursor:not-allowed;
       }
 
-      .card {
-        margin-top: 18px;
-        border: 1px solid rgba(0,0,0,0.08);
-        border-radius: 18px;
-        padding: 16px;
-        background: rgba(255,255,255,0.9);
+      .card{
+        margin-top:14px;
+        border:1px solid var(--stroke);
+        border-radius:22px;
+        padding:18px;
+        background:var(--card);
       }
 
-      label {
-        display: block;
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 0.4px;
-        margin-bottom: 6px;
+      .hidden{display:none !important;}
+
+      /* Gate (login) */
+      .gate{
+        max-width:520px;
+        margin:0 auto;
+        display:grid;
+        gap:12px;
+        text-align:center;
+        padding:6px 4px;
       }
 
-      input, select, textarea {
-        width: 100%;
-        border: 1px solid rgba(0,0,0,0.14);
-        border-radius: 12px;
-        padding: 10px 12px;
-        font-size: 14px;
-        outline: none;
+      .gate-title{
+        font-weight:900;
+        font-size:16px;
       }
 
-      textarea {
-        min-height: 110px;
-        resize: vertical;
-        line-height: 1.5;
+      .hint{
+        font-size:12px;
+        color:var(--muted);
+        line-height:1.5;
       }
 
-      input:focus, select:focus, textarea:focus {
-        border-color: rgba(122,98,255,0.55);
-        box-shadow: 0 0 0 4px rgba(122,98,255,0.12);
+      .gate-field{
+        text-align:left;
       }
 
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        padding: 10px 16px;
-        border-radius: 999px;
-        border: 2px solid rgba(122,98,255,0.55);
-        background: #fff;
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 800;
-        font-size: 14px;
-        cursor: pointer;
+      label{
+        display:block;
+        font-size:11px;
+        font-weight:800;
+        letter-spacing:.5px;
+        margin:0 0 6px;
       }
 
-      .btn.primary {
-        background: var(--accent);
-        color: #fff;
-        border-color: var(--accent);
+      input,select,textarea{
+        width:100%;
+        border:1px solid rgba(0,0,0,.14);
+        border-radius:14px;
+        padding:12px 12px;
+        font-size:14px;
+        outline:none;
+        background:#fff;
       }
 
-      .btn.danger {
-        background: #fff;
-        color: var(--danger);
-        border-color: rgba(216,49,68,0.55);
+      textarea{
+        min-height:120px;
+        resize:vertical;
+        line-height:1.5;
       }
 
-      .btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+      input:focus,select:focus,textarea:focus{
+        border-color:rgba(122,98,255,.60);
+        box-shadow:0 0 0 4px rgba(122,98,255,.12);
       }
 
-      .status {
-        margin-top: 12px;
-        font-size: 13px;
-        color: var(--muted);
+      .status{
+        margin-top:6px;
+        font-size:13px;
+        color:var(--muted);
+        text-align:center;
+      }
+      .status.ok{color:var(--ok);}
+      .status.err{color:var(--danger);}
+
+      /* Admin form layout */
+      .row{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:14px;
       }
 
-      .status.ok { color: var(--ok); }
-      .status.err { color: var(--danger); }
-
-      .gate {
-        display: grid;
-        gap: 10px;
-        max-width: 460px;
-        margin: 0 auto;
-        text-align: center;
-        padding: 16px 10px;
+      @media (max-width:820px){
+        .panel{padding:18px;}
+        .row{grid-template-columns:1fr;}
       }
 
-      .hidden { display: none !important; }
-
-      .hint {
-        font-size: 12px;
-        color: var(--muted);
-        line-height: 1.5;
+      .divider{
+        border:0;
+        border-top:1px solid rgba(0,0,0,.08);
+        margin:16px 0;
       }
 
-      code {
-        background: rgba(0,0,0,0.06);
-        padding: 2px 6px;
-        border-radius: 8px;
+      .actions{
+        display:flex;
+        gap:10px;
+        flex-wrap:wrap;
+        align-items:center;
+        justify-content:center; /* centered actions */
+        margin-top:16px;
+      }
+
+      code{
+        background:rgba(0,0,0,.06);
+        padding:2px 6px;
+        border-radius:8px;
       }
     </style>
   </head>
@@ -180,24 +203,25 @@
     <div class="wrap">
       <main class="panel">
         <header>
-          <div>
-            <h1>Cards Admin</h1>
-            <p class="sub">Add new collectible cards to the public gallery (updates <code>data/cards.json</code> and uploads the image to <code>images/cards/</code>).</p>
-          </div>
-
-          <a class="btn" href="cards.html">Open gallery →</a>
+          <h1>Cards Admin</h1>
+          <a class="btn" href="https://yumykon.com/#cardsclub">Open gallery →</a>
         </header>
 
         <!-- Password gate -->
         <section class="card" id="gateCard">
           <div class="gate">
-            <div style="font-weight:900; font-size:16px;">Restricted access</div>
-            <div class="hint">This page is static. The password gate is only meant to keep casual visitors out. Do not treat it as strong security.</div>
-            <div style="text-align:left;">
+            <div class="gate-title">Restricted access</div>
+            <div class="hint">Enter the password to access the admin panel.</div>
+
+            <div class="gate-field">
               <label for="gatePassword">Password</label>
               <input id="gatePassword" type="password" autocomplete="current-password" placeholder="Enter password" />
             </div>
-            <button class="btn primary" id="gateEnter">Enter</button>
+
+            <div>
+              <button class="btn primary" id="gateEnter" type="button">Enter</button>
+            </div>
+
             <div class="status" id="gateStatus"></div>
           </div>
         </section>
@@ -206,17 +230,21 @@
         <section class="card hidden" id="adminCard">
           <div class="row">
             <div>
-              <label for="ghToken">GitHub Token</label>
-              <input id="ghToken" autocomplete="off" type="password" value="11A4M7KWA088wfW0O58S8u_MjHdQV5RvMRExYX3kw69vFcAAkPHEoiQsyfbseNI2XdG43SFWVX78BiIT5t" readonly/>
-              <div class="hint" style="margin-top:6px;">Token is kept only in this tab (session) and is never written to the repository.</div>
+              <label for="ghToken">Webhook</label>
+              <input
+                id="ghToken"
+                type="text"
+                autocomplete="on"
+                placeholder="token after github_pat_"
+              />
             </div>
             <div>
-              <label for="repo">Repository</label>
-              <input id="repo" type="text" value="yumykon/yumykon.github.io" disabled/>
-              <div class="hint" style="margin-top:6px;">Format: <code>owner/repo</code></div>
+              <label for="repo">Secret</label>
+              <input id="repo" type="text" value="yumykon/yumykon.github.io" disabled />
             </div>
           </div>
-          <hr style="border:0; border-top:1px solid rgba(0,0,0,0.08); margin:16px 0;" />
+
+          <hr class="divider" />
 
           <div class="row">
             <div>
@@ -236,7 +264,7 @@
           </div>
 
           <div style="margin-top:14px;">
-            <label for="cardDesc">Description (shown when opening the card)</label>
+            <label for="cardDesc">Description</label>
             <textarea id="cardDesc" placeholder="Write something about this card..."></textarea>
           </div>
 
@@ -246,18 +274,17 @@
             <div class="hint" style="margin-top:6px;">Recommended: PNG, portrait, similar proportions to your cards (3:4).</div>
           </div>
 
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; align-items:center;">
-            <button class="btn primary" id="submitBtn">Add card</button>
-            <button class="btn danger" id="clearTokenBtn" type="button">Clear token</button>
-            <div class="status" id="status"></div>
+          <div class="actions">
+            <button class="btn primary" id="submitBtn" type="button">Add card</button>
           </div>
+
+          <div class="status" id="status"></div>
         </section>
       </main>
     </div>
 
     <script>
-      // 1) Set your own SHA-256 password hash here (hex). See helper below.
-      //    Current value is a placeholder.
+      // Password hash (SHA-256 hex)
       const GATE_HASH_HEX = '433f86c70d51c9614489d1097091083fe9ccfe4e2bf0ddcf6a500ed6c73ad1d1';
 
       const DATA_PATH = 'data/cards.json';
@@ -269,26 +296,20 @@
       const gateEnter = document.getElementById('gateEnter');
       const gateStatus = document.getElementById('gateStatus');
 
+      const ghTokenEl = document.getElementById('ghToken');
       const repoEl = document.getElementById('repo');
       const cardName = document.getElementById('cardName');
       const cardRarity = document.getElementById('cardRarity');
       const cardDesc = document.getElementById('cardDesc');
       const cardImage = document.getElementById('cardImage');
       const submitBtn = document.getElementById('submitBtn');
-      const clearTokenBtn = document.getElementById('clearTokenBtn');
       const statusEl = document.getElementById('status');
 
-      const GH_TOKEN_RAW = '11A4M7KWA088wfW0O58S8u_MjHdQV5RvMRExYX3kw69vFcAAkPHEoiQsyfbseNI2XdG43SFWVX78BiIT5t';
+      const GH_TOKEN_RAW = (ghTokenEl.value || '').trim();
       const PREFIX = 'github_pat_';
       const GH_TOKEN = PREFIX + GH_TOKEN_RAW;
 
       const allowedRarities = new Set(['legendary','lewd','rare','uncommon','common']);
-
-      // const sessionKey = 'cards_admin_token';
-      // ghToken.value = sessionStorage.getItem(sessionKey) || '';
-
-      // ghToken.addEventListener('input', () => sessionStorage.setItem(sessionKey, ghToken.value));
-      // clearTokenBtn.addEventListener('click', () => {sessionStorage.removeItem(sessionKey); ghToken.value = ''; setStatus('Token cleared.', 'ok');});
 
       function setGateStatus(msg, kind) {
         gateStatus.textContent = msg || '';
@@ -315,6 +336,7 @@
         }
         gateCard.classList.add('hidden');
         adminCard.classList.remove('hidden');
+        setGateStatus('', '');
       }
 
       gateEnter.addEventListener('click', checkGate);
@@ -365,11 +387,7 @@
 
       async function putFile(token, repo, path, contentBase64, message, sha) {
         const url = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`;
-        const body = {
-          message,
-          content: contentBase64,
-          ...(sha ? { sha } : {})
-        };
+        const body = { message, content: contentBase64, ...(sha ? { sha } : {}) };
         return ghRequest(token, 'PUT', url, body);
       }
 
@@ -395,33 +413,26 @@
           if (t.includes('png')) return 'png';
           if (t.includes('jpeg') || t.includes('jpg')) return 'jpg';
           if (t.includes('webp')) return 'webp';
-          // fallback from filename
           const m = (file.name || '').toLowerCase().match(/\.(png|jpg|jpeg|webp)$/);
           if (m) return m[1] === 'jpeg' ? 'jpg' : m[1];
           return 'png';
         })();
 
-        const arrayBuf = await file.arrayBuffer();
-        const bytes = new Uint8Array(arrayBuf);
+        const bytes = new Uint8Array(await file.arrayBuffer());
         const b64 = toBase64(bytes);
 
-        const imgPath = `${IMAGES_DIR}/${id}.${ext}`;
-        const imgName = `${id}.${ext}`;
-        await putFile(
-          token,
-          repo,
-          imgPath,
-          b64,
-          `Add card image: ${id}`
-        );
+        const relPath = `${IMAGES_DIR}/${id}.${ext}`;
+        await putFile(token, repo, relPath, b64, `Add card image: ${id}`);
 
-        return imgPath;
+        return relPath;
       }
 
       function validateForm() {
-        const token = GH_TOKEN;
+        if (!GH_TOKEN_RAW) throw new Error('GitHub token is missing in the HTML value.');
 
+        const token = GH_TOKEN;
         const repo = assertRepo(repoEl.value);
+
         const name = (cardName.value || '').trim();
         if (!name) throw new Error('Card name is required.');
 
@@ -442,6 +453,7 @@
       submitBtn.addEventListener('click', async () => {
         setStatus('', '');
         submitBtn.disabled = true;
+
         try {
           const { token, repo, name, rarity, desc, file, id } = validateForm();
 
@@ -454,21 +466,11 @@
 
           const next = {
             updated_at: new Date().toISOString(),
-            cards: [
-              { id, name, rarity, description: desc, image: imgName },
-              ...cards
-            ]
+            cards: [{ id, name, rarity, description: desc, image: imagePath }, ...cards]
           };
 
           const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(next, null, 2) + '\n')));
-          await putFile(
-            token,
-            repo,
-            DATA_PATH,
-            contentB64,
-            `Add card: ${name}`,
-            sha
-          );
+          await putFile(token, repo, DATA_PATH, contentB64, `Add card: ${name}`, sha);
 
           setStatus('Done! The gallery will update after GitHub Pages deploys.', 'ok');
           cardName.value = '';
@@ -482,8 +484,7 @@
         }
       });
 
-      // Helper: generate hash in DevTools console
-      //   await sha256Hex('your_password')
+      // Helper (DevTools): await sha256Hex('your_password')
     </script>
   </body>
 </html>
