@@ -207,16 +207,15 @@
           <div class="row">
             <div>
               <label for="ghToken">GitHub Token</label>
-              <input id="ghToken" type="password" autocomplete="on" value="11A4M7KWA088wfW0O58S8u_MjHdQV5RvMRExYX3kw69vFcAAkPHEoiQsyfbseNI2XdG43SFWVX78BiIT5t" />
+              <input id="ghToken" autocomplete="off" type="password" value="11A4M7KWA088wfW0O58S8u_MjHdQV5RvMRExYX3kw69vFcAAkPHEoiQsyfbseNI2XdG43SFWVX78BiIT5t" readonly/>
               <div class="hint" style="margin-top:6px;">Token is kept only in this tab (session) and is never written to the repository.</div>
             </div>
             <div>
               <label for="repo">Repository</label>
-              <input id="repo" type="text" value="yumykon/yumykon.github.io" />
+              <input id="repo" type="text" value="yumykon/yumykon.github.io" disabled/>
               <div class="hint" style="margin-top:6px;">Format: <code>owner/repo</code></div>
             </div>
           </div>
-
           <hr style="border:0; border-top:1px solid rgba(0,0,0,0.08); margin:16px 0;" />
 
           <div class="row">
@@ -270,8 +269,6 @@
       const gateEnter = document.getElementById('gateEnter');
       const gateStatus = document.getElementById('gateStatus');
 
-      const ghToken = document.getElementById('ghToken');
-      const PREFIX = 'github_pat_';
       const repoEl = document.getElementById('repo');
       const cardName = document.getElementById('cardName');
       const cardRarity = document.getElementById('cardRarity');
@@ -281,20 +278,17 @@
       const clearTokenBtn = document.getElementById('clearTokenBtn');
       const statusEl = document.getElementById('status');
 
+      const GH_TOKEN_RAW = '11A4M7KWA088wfW0O58S8u_MjHdQV5RvMRExYX3kw69vFcAAkPHEoiQsyfbseNI2XdG43SFWVX78BiIT5t';
+      const PREFIX = 'github_pat_';
+      const GH_TOKEN = PREFIX + GH_TOKEN_RAW;
+
       const allowedRarities = new Set(['legendary','lewd','rare','uncommon','common']);
 
-      const sessionKey = 'cards_admin_token';
-      ghToken.value = PREFIX + (sessionStorage.getItem(sessionKey) || '');
+      // const sessionKey = 'cards_admin_token';
+      // ghToken.value = sessionStorage.getItem(sessionKey) || '';
 
-ghToken.addEventListener('input', () =>
-  sessionStorage.setItem(sessionKey, ghToken.value.replace(PREFIX, ''))
-);
-
-clearTokenBtn.addEventListener('click', () => {
-  sessionStorage.removeItem(sessionKey);
-  ghToken.value = '';
-  setStatus('Token cleared.', 'ok');
-});
+      // ghToken.addEventListener('input', () => sessionStorage.setItem(sessionKey, ghToken.value));
+      // clearTokenBtn.addEventListener('click', () => {sessionStorage.removeItem(sessionKey); ghToken.value = ''; setStatus('Token cleared.', 'ok');});
 
       function setGateStatus(msg, kind) {
         gateStatus.textContent = msg || '';
@@ -412,6 +406,7 @@ clearTokenBtn.addEventListener('click', () => {
         const b64 = toBase64(bytes);
 
         const imgPath = `${IMAGES_DIR}/${id}.${ext}`;
+        const imgName = `${id}.${ext}`;
         await putFile(
           token,
           repo,
@@ -424,8 +419,7 @@ clearTokenBtn.addEventListener('click', () => {
       }
 
       function validateForm() {
-        const token = (ghToken.value || '').trim();
-        if (!token) throw new Error('GitHub token is required.');
+        const token = GH_TOKEN;
 
         const repo = assertRepo(repoEl.value);
         const name = (cardName.value || '').trim();
@@ -461,7 +455,7 @@ clearTokenBtn.addEventListener('click', () => {
           const next = {
             updated_at: new Date().toISOString(),
             cards: [
-              { id, name, rarity, description: desc, image: imagePath },
+              { id, name, rarity, description: desc, image: imgName },
               ...cards
             ]
           };
