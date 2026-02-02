@@ -1,6 +1,13 @@
 {
-  "updated_at": "2026-02-02T06:07:46.051Z",
+  "updated_at": "2026-02-02T06:33:16.926Z",
   "cards": [
+    {
+      "id": "kanash-1770013995043",
+      "name": "Kanash",
+      "rarity": "rare",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc euismod augue sed nunc scelerisque, eget bibendum magna convallis. Sed vitae commodo ligula. Proin vel libero luctus, sollicitudin dui efficitur, tempus sem. Etiam finibus urna et tellus dapibus, vitae consectetur diam tristique. Suspendisse finibus nulla eget ultricies gravida. Nullam eu eros ut ipsum vulputate interdum varius eu ex. Aliquam eget nisl sit amet diam consectetur posuere.\n\nVivamus eget eleifend augue. Vivamus interdum metus vel tortor tristique, vitae lobortis lorem bibendum. Mauris accumsan vehicula purus quis convallis. Vivamus tincidunt vehicula mauris, sit amet sodales augue maximus sit amet. Aliquam erat volutpat. Nunc quis augue vulputate, congue urna sed, laoreet quam. Vestibulum et sapien non nisl facilisis ornare id at ante.",
+      "image": "kanash-1770013995043.jpg"
+    },
     {
       "id": "cosmic-satomi-1770012464635",
       "name": "Cosmic Satomi",
