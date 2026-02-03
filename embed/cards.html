@@ -134,7 +134,7 @@
       --lift: 0px;
 
       border: 1px solid var(--border);
-      border-radius: 40px;
+      border-radius: 18px;
       overflow: hidden;
       background: #fff;
       cursor: pointer;
@@ -162,16 +162,85 @@
       border-radius: 40px;
     }
 
+    /* Uncommon: Legendary palette, linear diagonal, NO animation (parallax only) */
+    /* Uncommon: Legendary palette (like Legendary), linear diagonal, no animation (parallax only) */
+    .modal-fx.arcane{
+      mix-blend-mode: screen;
+      opacity: .78;
+
+      background:
+        /* soft specular sweep */
+        linear-gradient(135deg,
+          rgba(255,255,255,.22),
+          rgba(255,255,255,0) 40%,
+          rgba(255,255,255,.18) 70%,
+          rgba(255,255,255,0) 100%),
+        /* main prismatic band */
+        linear-gradient(135deg,
+          rgba(255, 0, 0, .62),
+          rgba(255, 127, 0, .56),
+          rgba(255, 255, 0, .48),
+          rgba(0, 255, 0, .48),
+          rgba(0, 0, 255, .56),
+          rgba(75, 0, 130, .60),
+          rgba(148, 0, 211, .62)
+        );
+
+      background-size: 220% 220%, 240% 240%;
+      background-position:
+        calc(50% + (var(--fxX, 0px) * 0.6)) calc(50% + (var(--fxY, 0px) * 0.6)),
+        calc(50% + var(--fxX, 0px)) calc(50% + var(--fxY, 0px));
+
+      animation: none;
+      filter: saturate(1.45) brightness(1.10) contrast(1.05);
+    }
+
+    /* subtle glitter */
+    .modal-fx.arcane::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      mix-blend-mode: screen;
+      opacity: .22;
+
+      background-image:
+        radial-gradient(circle at 14px 18px, rgba(255,255,255,.85) 0 1px, transparent 2px),
+        radial-gradient(circle at 56px 44px, rgba(255,255,255,.70) 0 1px, transparent 2px),
+        radial-gradient(circle at 92px 28px, rgba(255,255,255,.75) 0 .9px, transparent 2px),
+        radial-gradient(circle at 24px 92px, rgba(255,255,255,.65) 0 1px, transparent 2px),
+        radial-gradient(circle at 102px 104px, rgba(255,255,255,.60) 0 .9px, transparent 2px);
+
+      background-size: 120px 120px;
+      background-repeat: repeat;
+      filter: blur(.25px);
+    }
+
+    /* micro-stripes for “foil feel” */
+    .modal-fx.arcane::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity: .10;
+      mix-blend-mode: overlay;
+
+      background: repeating-linear-gradient(
+        135deg,
+        rgba(255,255,255,.55) 0 2px,
+        rgba(255,255,255,0) 2px 10px
+      );
+    }
+
+
     .modal-fx.holo{
       /* Lewd: pink/red foil with lust/heart vibe */
       background:
-        /* moving pink-red sheen */
         linear-gradient(120deg,
           rgba(255, 40, 120, .45),
           rgba(255, 90, 90, .35),
           rgba(255, 0, 120, .45),
           rgba(255, 40, 120, .45)),
-        /* subtle light sweep */
         linear-gradient(135deg,
           rgba(255,255,255,.18),
           rgba(255,255,255,0) 60%);
@@ -183,10 +252,9 @@
     .modal-fx.holo::after{
       content:"";
       position:absolute;
-      inset:0; /* FIX: do not overshoot container, iframe-safe */
+      inset:0;
       pointer-events:none;
-      /* SVG hearts (outline only) tiled */
-      background-color: rgba(255,60,140,.45);
+      background-color: rgba(255, 60, 141, 0.84);
       mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><path d='M60 95 C20 65,10 40,30 25 C45 15,60 30,60 30 C60 30,75 15,90 25 C110 40,100 65,60 95 Z' fill='none' stroke='white' stroke-width='10' stroke-linejoin='round'/></svg>");
       mask-size: 120px 120px;
       mask-repeat: repeat;
@@ -196,16 +264,66 @@
       opacity: .65;
     }
 
-    @keyframes lewdShift{
-      0%{
-        background-position: 0 0, 0% 50%;
-      }
-      50%{
-        background-position: 140px 140px, 100% 50%;
-      }
-      100%{
-        background-position: 280px 280px, 0% 50%;
-      }
+    /* Rare: Prismatic Dust (sparkly particle drift) */
+    .modal-fx.dust{
+      mix-blend-mode: screen;
+      opacity: .45;
+      background:
+        radial-gradient(circle at 30% 35%, rgba(140, 210, 255, .35), transparent 55%),
+        radial-gradient(circle at 70% 65%, rgba(170, 120, 255, .28), transparent 60%);
+      animation: dustGlow 10s ease-in-out infinite;
+    }
+
+    .modal-fx.dust::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        radial-gradient(circle at 12px 18px, rgba(160,230,255,.70) 0 1px, transparent 2px),
+        radial-gradient(circle at 54px 42px, rgba(210,170,255,.65) 0 1px, transparent 2px),
+        radial-gradient(circle at 88px 26px, rgba(120,255,220,.60) 0 1px, transparent 2px),
+        radial-gradient(circle at 28px 86px, rgba(255,255,255,.55) 0 1px, transparent 2px),
+        radial-gradient(circle at 96px 92px, rgba(140,210,255,.55) 0 1px, transparent 2px),
+        radial-gradient(circle at 18px 64px, rgba(210,170,255,.50) 0 1px, transparent 2px);
+      background-size: 120px 120px;
+      background-repeat: repeat;
+      opacity: .75;
+      filter: blur(.15px);
+      animation: dustDrift 8.5s linear infinite;
+      mix-blend-mode: screen;
+    }
+
+    .modal-fx.dust::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        radial-gradient(circle at 16px 22px, rgba(255,255,255,.50) 0 .8px, transparent 2px),
+        radial-gradient(circle at 44px 70px, rgba(160,230,255,.45) 0 .8px, transparent 2px),
+        radial-gradient(circle at 92px 58px, rgba(210,170,255,.40) 0 .8px, transparent 2px);
+      background-size: 92px 92px;
+      background-repeat: repeat;
+      opacity: .55;
+      animation: dustDrift2 14s linear infinite;
+      mix-blend-mode: screen;
+    }
+
+    @keyframes dustGlow{
+      0%{ filter: saturate(1.05) brightness(1.00); }
+      50%{ filter: saturate(1.35) brightness(1.06); }
+      100%{ filter: saturate(1.05) brightness(1.00); }
+    }
+
+    @keyframes dustDrift{
+      0%{ background-position: 0 0; }
+      100%{ background-position: -160px 160px; }
+    }
+
+    @keyframes dustDrift2{
+      0%{ background-position: 0 0; }
+      100%{ background-position: 120px 240px; }
     }
 
     .modal-fx.foil{
@@ -216,7 +334,6 @@
     }
 
     .modal-fx.poly{
-      /* Balatro-ish Polychrome: moving rainbow sheen (smooth loop) */
       background: conic-gradient(
         from 0deg,
         #ff0000, #ff7f00, #ffff00, #00ff00,
@@ -224,15 +341,10 @@
       );
       transform: scale(1.35) rotate(0deg);
       transform-origin: 50% 50%;
-
-      /* mais lento */
       animation: polySpin 6s linear infinite;
-
-      /* mais opaco */
       mix-blend-mode: overlay;
       opacity: .45;
     }
-
 
     @keyframes lewdSheen{
       0%{ background-position: 0% 50%, 0% 0%; }
@@ -248,11 +360,11 @@
         transform: rotate(45deg) translate3d(-120px,120px,0) scale(1);
       }
     }
+
     @keyframes polySpin{
       0%   { transform: scale(2) rotate(0deg); }
       100% { transform: scale(2) rotate(360deg); }
     }
-
 
     .thumb{
       position: relative;
@@ -404,7 +516,6 @@
       --mx: 0px;
       --my: 0px;
 
-      /* Size to the rendered card (no forced crop); scale down only if needed */
       width: fit-content;
       max-width: min(520px, 100%);
       max-height: 82vh;
@@ -417,16 +528,15 @@
       transform: translate3d(var(--mx), var(--my), 0) rotateX(var(--mrx)) rotateY(var(--mry));
       transition: transform 120ms ease;
 
-      pointer-events: auto; /* must receive hover/move */
+      pointer-events: auto;
     }
 
     .modal-card-float{
-      position: relative; /* makes .modal-fx absolute sizing match the card */
+      position: relative;
       border-radius: 40px;
       box-sizing: border-box;
-      overflow: hidden; /* clip overlay to rounded corners */
+      overflow: hidden;
 
-      /* Let the image define the box; only constrain it */
       width: fit-content;
       height: fit-content;
       max-width: min(520px, 100%);
@@ -437,7 +547,7 @@
       justify-content:center;
 
       animation: modalFloat 3.6s ease-in-out infinite;
-      animation-play-state: running; /* always floating */
+      animation-play-state: running;
       pointer-events: none;
     }
 
@@ -447,7 +557,6 @@
     }
 
     .modal-card-float img{
-      /* Show the full card; never crop */
       width: auto;
       height: auto;
       max-width: 100%;
@@ -506,7 +615,6 @@
 
     .desc[data-empty="true"]{ color: rgba(255,255,255,.55); }
 
-    /* reduced motion */
     @media (prefers-reduced-motion: reduce){
       .card, .chip { transition: none; }
       .card{ transform: none; }
@@ -563,12 +671,9 @@
 
   <script>
     // ---------- config ----------
-    // Paths: this file lives at /embed/cards.html
-    // Use ../ so it works on GitHub Pages (and avoids double /images/cards/)
     const DATA_URL = "../data/cards.json";
     const IMG_BASE = "../images/cards/";
-
-    const RARITIES = ["All", "Legendary", "Lewd", "Rare", "Uncommon", "Common"]; // order matters
+    const RARITIES = ["All", "Legendary", "Lewd", "Rare", "Uncommon", "Common"];
 
     // ---------- state ----------
     let allCards = [];
@@ -612,17 +717,12 @@
         .trim();
     }
 
-    // Avoid double paths when JSON already includes "images/cards/..." etc.
     function resolveImageUrl(image){
       const raw = String(image || "").trim();
       if(!raw) return "";
-      // absolute URLs
       if(/^https?:\/\//i.test(raw)) return raw;
-      // already an absolute path
       if(raw.startsWith("/")) return raw;
-      // already a relative path
       if(raw.startsWith("images/") || raw.startsWith("../") || raw.startsWith("./")) return raw;
-      // default: treat as filename under IMG_BASE
       return IMG_BASE + raw;
     }
 
@@ -636,7 +736,6 @@
         b.dataset.active = (r === activeRarity) ? "true" : "false";
         b.addEventListener("click", () => {
           activeRarity = r;
-          // update chip states
           for(const c of elChips.querySelectorAll(".chip")){
             c.dataset.active = (c.textContent === activeRarity) ? "true" : "false";
           }
@@ -672,12 +771,12 @@
       elModalRarityDot.style.background = rarityDotColor(c.rarity);
       elModalRarityText.textContent = rarityLabel || "Unknown";
 
-      // Balatro-ish rarity overlay (modal only)
       if(elModalFx){
         elModalFx.className = "modal-fx";
         const r = normalize(c.rarity);
         if(r === "lewd") elModalFx.classList.add("holo");
-        else if(r === "rare") elModalFx.classList.add("foil");
+        else if(r === "rare") elModalFx.classList.add("dust");
+        else if(r === "uncommon") elModalFx.classList.add("arcane");
         else if(r === "legendary") elModalFx.classList.add("poly");
       }
 
@@ -690,10 +789,8 @@
         elModalDesc.dataset.empty = "true";
       }
 
-      // enable modal FX
       enableModalFX();
 
-      // lock scroll inside iframe
       document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
 
@@ -707,7 +804,6 @@
     let modalLast = null;
 
     function setModalVars(nx, ny){
-      // tune to taste
       const maxRot = 10;   // degrees
       const maxMove = 10;  // px
 
@@ -720,6 +816,13 @@
       elModalCardTilt.style.setProperty("--mrx", `${rx}deg`);
       elModalCardTilt.style.setProperty("--mx", `${mx}px`);
       elModalCardTilt.style.setProperty("--my", `${my}px`);
+
+      // FX parallax (slower than the card)
+      if(elModalFx){
+        const fxMove = maxMove * 0.35;
+        elModalFx.style.setProperty("--fxX", `${(-nx * fxMove).toFixed(2)}px`);
+        elModalFx.style.setProperty("--fxY", `${(-ny * fxMove).toFixed(2)}px`);
+      }
     }
 
     function modalApply(){
@@ -745,19 +848,22 @@
     function resetModalFX(){
       modalLast = null;
       if(modalRAF){ cancelAnimationFrame(modalRAF); modalRAF = 0; }
+
       if(elModalCardTilt){
         elModalCardTilt.style.setProperty("--mrx", "0deg");
         elModalCardTilt.style.setProperty("--mry", "0deg");
         elModalCardTilt.style.setProperty("--mx", "0px");
         elModalCardTilt.style.setProperty("--my", "0px");
       }
+
+      if(elModalFx){
+        elModalFx.style.setProperty("--fxX", "0px");
+        elModalFx.style.setProperty("--fxY", "0px");
+      }
     }
 
     function enableModalFX(){
-      // float always while modal is open
       if(elModalCardFloat) elModalCardFloat.style.animationPlayState = "running";
-
-      // mouse-follow tilt only on hover
       modalFxOn = false;
       resetModalFX();
     }
@@ -771,13 +877,13 @@
     // track mouse ONLY when hovering the card in the modal
     elModalCardTilt.addEventListener("pointerenter", () => {
       if(reduceMotionGlobal) return;
-      modalFxOn = true; // enable ONLY mouse-follow
+      modalFxOn = true;
     });
 
     elModalCardTilt.addEventListener("pointermove", onModalMove);
 
     elModalCardTilt.addEventListener("pointerleave", () => {
-      modalFxOn = false; // pause mouse-follow
+      modalFxOn = false;
       resetModalFX();
     });
 
@@ -815,9 +921,8 @@
           if(!last) return;
           const { nx, ny } = last;
 
-          // tune these values to taste
-          const maxRot = 8;      // degrees
-          const maxMove = 3;     // px
+          const maxRot = 8;
+          const maxMove = 3;
 
           const ry = (nx * maxRot).toFixed(2);
           const rx = (-ny * maxRot).toFixed(2);
@@ -832,14 +937,13 @@
 
         function onMove(e){
           if(reduceMotion) return;
-          // only for mouse/pen; touch feels weird
           if(e.pointerType && e.pointerType === "touch") return;
 
           const rect = card.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width;   // 0..1
-          const y = (e.clientY - rect.top) / rect.height;   // 0..1
-          const nx = (x - 0.5) * 2; // -1..1
-          const ny = (y - 0.5) * 2; // -1..1
+          const x = (e.clientX - rect.left) / rect.width;
+          const y = (e.clientY - rect.top) / rect.height;
+          const nx = (x - 0.5) * 2;
+          const ny = (y - 0.5) * 2;
 
           last = { nx, ny };
           if(!raf) raf = requestAnimationFrame(applyTilt);
@@ -869,7 +973,6 @@
         elGrid.appendChild(card);
       }
 
-      // nudge resize after render
       requestAnimationFrame(() => window.__sendResize && window.__sendResize(true));
     }
 
@@ -886,16 +989,13 @@
       window.__sendResize && window.__sendResize(true);
     }
 
-    // Close button
     elCloseBtn.addEventListener("click", closeModal);
 
-    // Close by clicking outside the dialog (anywhere on the dark overlay)
     elModal.addEventListener("mousedown", (e) => {
       if(elModal.dataset.open !== "true") return;
       if(!elModalInner.contains(e.target)) closeModal();
     });
 
-    // Escape closes
     window.addEventListener("keydown", (e) => {
       if(e.key === "Escape" && elModal.dataset.open === "true") closeModal();
     });
@@ -911,8 +1011,6 @@
         const r = await fetch(DATA_URL, { cache: "no-store" });
         const data = await r.json();
 
-        // Support both shapes:
-        // { cards: [...] } (project) OR { items: [...] } (alt)
         const raw = Array.isArray(data.cards) ? data.cards : (Array.isArray(data.items) ? data.items : []);
 
         allCards = raw
@@ -963,7 +1061,6 @@
         }
       }
 
-      // Expose for the app to nudge resizes after renders
       window.__sendResize = send;
 
       window.addEventListener("load", () => send(true));
