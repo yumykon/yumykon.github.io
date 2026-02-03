@@ -192,7 +192,7 @@
       mask-repeat: repeat;
       mix-blend-mode: screen;
       /* rotate hearts to match diagonal drift */
-      transform: rotate(45deg) scale(1.35);
+      transform: rotate(45deg) scale(1.05);
       transform-origin: 50% 50%;
       animation: heartsDrift 10s linear infinite;
       opacity: .65;
@@ -243,10 +243,12 @@
     }
 
     @keyframes heartsDrift{
-      0%{ transform: translate3d(0,0,0) scale(1); }
-      100%{ transform: translate3d(-120px,120px,0) scale(1.05); }
-      50%{ background-position: 100% 50%; }
-      100%{ background-position: 0% 50%; }
+      0%{
+        transform: rotate(45deg) translate3d(0,0,0) scale(1.05);
+      }
+      100%{
+        transform: rotate(45deg) translate3d(-120px,120px,0) scale(1.05);
+      }
     }
     @keyframes polySpin{
       0%   { transform: scale(2) rotate(0deg); }
@@ -419,6 +421,7 @@
     }
 
     .modal-card-float{
+      position: relative; /* IMPORTANT: makes .modal-fx absolute sizing match the card */
       border-radius: 40px;
       box-sizing: border-box;
       overflow: hidden; /* clip overlay to rounded corners */
