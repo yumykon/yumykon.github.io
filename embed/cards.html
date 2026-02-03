@@ -183,7 +183,7 @@
     .modal-fx.holo::after{
       content:"";
       position:absolute;
-      inset:-20%;
+      inset:0; /* FIX: do not overshoot container, iframe-safe */
       pointer-events:none;
       /* SVG hearts (outline only) tiled */
       background-color: rgba(255,60,140,.45);
@@ -191,8 +191,6 @@
       mask-size: 120px 120px;
       mask-repeat: repeat;
       mix-blend-mode: screen;
-      /* rotate hearts to match diagonal drift */
-      transform: rotate(45deg) scale(1.05);
       transform-origin: 50% 50%;
       animation: heartsDrift 10s linear infinite;
       opacity: .65;
@@ -244,10 +242,10 @@
 
     @keyframes heartsDrift{
       0%{
-        transform: rotate(45deg) translate3d(0,0,0) scale(1.05);
+        transform: rotate(45deg) translate3d(0,0,0) scale(1);
       }
       100%{
-        transform: rotate(45deg) translate3d(-120px,120px,0) scale(1.05);
+        transform: rotate(45deg) translate3d(-120px,120px,0) scale(1);
       }
     }
     @keyframes polySpin{
@@ -406,8 +404,9 @@
       --mx: 0px;
       --my: 0px;
 
-      /* IMPORTANT: don't stretch to the whole modal column */
-      width: min(520px, 100%);
+      /* Size to the rendered card (no forced crop); scale down only if needed */
+      width: fit-content;
+      max-width: min(520px, 100%);
       max-height: 82vh;
       display:flex;
       align-items:center;
@@ -427,11 +426,11 @@
       box-sizing: border-box;
       overflow: hidden; /* clip overlay to rounded corners */
 
-      /* IMPORTANT: size the container to the card itself (not the column height) */
-      width: 100%;
-      aspect-ratio: 3 / 4;
+      /* Let the image define the box; only constrain it */
+      width: fit-content;
+      height: fit-content;
+      max-width: min(520px, 100%);
       max-height: 82vh;
-      height: auto;
 
       display:flex;
       align-items:center;
@@ -448,10 +447,12 @@
     }
 
     .modal-card-float img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* card should fill the container */
+      /* Show the full card; never crop */
+      width: auto;
+      height: auto;
+      max-width: 100%;
       max-height: 82vh;
+      object-fit: contain;
       display:block;
       border-radius: 40px;
       filter: drop-shadow(0 18px 40px rgba(0,0,0,.55));
