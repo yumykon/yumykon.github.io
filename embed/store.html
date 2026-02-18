@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yumykon Store Widget</title>
+  <style>
+    :root{
+      --bg: transparent;
+      --radius: 18px;
+      --frame-border: rgba(255,255,255,.14);
+      --frame-shadow: 0 18px 48px rgba(0,0,0,.28);
+
+      /* Crop tuning to focus product content area */
+      --crop-top: 210px;
+      --crop-bottom: 90px;
+      --crop-left: 14px;
+      --crop-right: 14px;
+      --widget-height: 1200px;
+    }
+
+    *{ box-sizing: border-box; }
+
+    html, body{
+      margin:0;
+      padding:0;
+      background: var(--bg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+
+    .wrap{
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 8px;
+    }
+
+    .frame{
+      position: relative;
+      height: var(--widget-height);
+      border-radius: var(--radius);
+      overflow: hidden;
+      overscroll-behavior: none;
+      border: 1px solid var(--frame-border);
+      box-shadow: var(--frame-shadow);
+      background: #0f1016;
+    }
+
+    iframe{
+      border: 0;
+      width: calc(100% + var(--crop-left) + var(--crop-right));
+      height: calc(100% + var(--crop-top) + var(--crop-bottom));
+      transform: translate(
+        calc(var(--crop-left) * -1),
+        calc(var(--crop-top) * -1)
+      );
+      display: block;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .fallback{
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      background: linear-gradient(140deg, #0f111b, #1b1f31);
+      color: #eaf0ff;
+    }
+
+    .fallback[data-open="true"]{ display: flex; }
+
+    .fallback a{
+      display: inline-block;
+      margin-top: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #fff;
+      background: #3a61ff;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    @media (max-width: 720px){
+      :root{
+        --crop-top: 190px;
+        --crop-bottom: 60px;
+        --crop-left: 10px;
+        --crop-right: 10px;
+        --widget-height: 980px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="frame">
+      <iframe
+        id="storeFrame"
+        src="https://acggoods.com/store/yumykon"
+        scrolling="no"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="payment *"
+        title="Yumykon products"
+      ></iframe>
+
+      <div class="fallback" id="fallback" data-open="false" aria-live="polite">
+        <div>
+          <strong>Não foi possível exibir a loja dentro do iframe.</strong><br />
+          Alguns navegadores/sites bloqueiam embed externo.
+          <br />
+          <a href="https://acggoods.com/store/yumykon" target="_blank" rel="noopener noreferrer">
+            Abrir loja da Yumykon
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const frame = document.getElementById("storeFrame");
+      const frameWrap = document.querySelector(".frame");
+      const fallback = document.getElementById("fallback");
+      let loaded = false;
+
+      frame.addEventListener("load", () => {
+        loaded = true;
+        fallback.dataset.open = "false";
+      });
+
+      // Se o site bloquear embedding, o load pode não ocorrer de forma útil.
+      setTimeout(() => {
+        if(!loaded) fallback.dataset.open = "true";
+      }, 4500);
+
+      // Keep widget static (no internal scroll by wheel/touch gestures).
+      const blockScroll = (e) => e.preventDefault();
+      frameWrap.addEventListener("wheel", blockScroll, { passive: false });
+      frameWrap.addEventListener("touchmove", blockScroll, { passive: false });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const PARENT_ORIGIN = "https://yumykon.com";
+      const TYPE = "yumykon:resize";
+      const FRAME_ID = "storeFrame";
+
+      function getHeight(){
+        const doc = document.documentElement;
+        const body = document.body;
+        return Math.max(
+          doc.scrollHeight, doc.offsetHeight, doc.clientHeight,
+          body ? body.scrollHeight : 0,
+          body ? body.offsetHeight : 0
+        );
+      }
+
+      let last = 0;
+      function send(force=false){
+        const h = getHeight();
+        if(!force && Math.abs(h - last) < 2) return;
+        last = h;
+        if(window.parent){
+          window.parent.postMessage({ type: TYPE, id: FRAME_ID, height: h }, PARENT_ORIGIN);
+        }
+      }
+
+      window.addEventListener("load", () => send(true));
+      window.addEventListener("resize", () => send(true));
+
+      const ro = new ResizeObserver(() => send());
+      ro.observe(document.documentElement);
+
+      const mo = new MutationObserver(() => send());
+      mo.observe(document.documentElement, { childList:true, subtree:true, attributes:true });
+    })();
+  </script>
+</body>
+</html>

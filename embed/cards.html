@@ -158,89 +158,106 @@
       position:absolute;
       inset:0;
       pointer-events:none;
-      mix-blend-mode: overlay;
       border-radius: 40px;
+      z-index: 2; /* always above the card image */
+      mix-blend-mode: overlay;
     }
 
-    /* Uncommon: Legendary palette, linear diagonal, NO animation (parallax only) */
-    /* Uncommon: Legendary palette (like Legendary), linear diagonal, no animation (parallax only) */
+    /* Uncommon: Arcane Prism (diagonal gradient + parallax) */
     .modal-fx.arcane{
-      mix-blend-mode: screen;
-      opacity: .78;
-
       background:
-        /* soft specular sweep */
         linear-gradient(135deg,
-          rgba(255,255,255,.22),
-          rgba(255,255,255,0) 40%,
-          rgba(255,255,255,.18) 70%,
-          rgba(255,255,255,0) 100%),
-        /* main prismatic band */
-        linear-gradient(135deg,
-          rgba(255, 0, 0, .62),
-          rgba(255, 127, 0, .56),
-          rgba(255, 255, 0, .48),
-          rgba(0, 255, 0, .48),
-          rgba(0, 0, 255, .56),
-          rgba(75, 0, 130, .60),
-          rgba(148, 0, 211, .62)
-        );
+          rgba(52, 108, 255, .42) 0%,
+          rgba(38, 72, 210, .40) 30%,
+          rgba(86, 56, 198, .44) 64%,
+          rgba(64, 122, 255, .38) 100%),
+        linear-gradient(45deg,
+          rgba(120,170,255,.14) 0%,
+          rgba(255,255,255,0) 52%,
+          rgba(138,118,255,.14) 100%);
 
-      background-size: 220% 220%, 240% 240%;
+      background-size: 230% 230%, 260% 260%;
       background-position:
-        calc(50% + (var(--fxX, 0px) * 0.6)) calc(50% + (var(--fxY, 0px) * 0.6)),
-        calc(50% + var(--fxX, 0px)) calc(50% + var(--fxY, 0px));
+        calc(50% + var(--fxX, 0px)) calc(50% + var(--fxY, 0px)),
+        calc(50% + var(--fxX2, 0px)) calc(50% + var(--fxY2, 0px));
 
-      animation: none;
-      filter: saturate(1.45) brightness(1.10) contrast(1.05);
+      mix-blend-mode: screen;
+      opacity: .62;
+      filter: saturate(1.55) brightness(1.04) hue-rotate(-6deg);
+      animation: arcanePulse 3.8s ease-in-out infinite;
     }
 
-    /* subtle glitter */
+    @supports not (mix-blend-mode: screen){
+      .modal-fx.arcane{ mix-blend-mode: overlay; opacity: .45; }
+    }
+
     .modal-fx.arcane::before{
       content:"";
       position:absolute;
       inset:0;
+      border-radius: inherit;
       pointer-events:none;
-      mix-blend-mode: screen;
-      opacity: .22;
 
-      background-image:
-        radial-gradient(circle at 14px 18px, rgba(255,255,255,.85) 0 1px, transparent 2px),
-        radial-gradient(circle at 56px 44px, rgba(255,255,255,.70) 0 1px, transparent 2px),
-        radial-gradient(circle at 92px 28px, rgba(255,255,255,.75) 0 .9px, transparent 2px),
-        radial-gradient(circle at 24px 92px, rgba(255,255,255,.65) 0 1px, transparent 2px),
-        radial-gradient(circle at 102px 104px, rgba(255,255,255,.60) 0 .9px, transparent 2px);
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(170, 215, 255, .00) 0 16px,
+          rgba(170, 215, 255, .18) 16px 18px,
+          rgba(170, 215, 255, .00) 18px 34px
+        ),
+        repeating-linear-gradient(
+          135deg,
+          rgba(135, 110, 255, .00) 0 32px,
+          rgba(135, 110, 255, .14) 32px 34px,
+          rgba(135, 110, 255, .00) 34px 56px
+        ),
+        linear-gradient(125deg,
+          rgba(255,255,255,.00) 24%,
+          rgba(120,160,255,.22) 48%,
+          rgba(255,255,255,.00) 72%);
+      background-size: 170% 170%, 210% 210%, 190% 190%;
+      background-position:
+        calc(50% + var(--coneX2, 0px)) calc(50% + var(--coneY2, 0px)),
+        calc(50% + var(--coneX, 0px)) calc(50% + var(--coneY, 0px)),
+        calc(50% + var(--coneX, 0px)) calc(50% + var(--coneY, 0px));
+      background-repeat: repeat, repeat, no-repeat;
 
-      background-size: 120px 120px;
-      background-repeat: repeat;
-      filter: blur(.25px);
+      mix-blend-mode: color-dodge;
+      opacity: .34;
+      transform: translate3d(var(--coneX, 0px), var(--coneY, 0px), 0) scale(1.03);
+      animation: arcaneSweep 4.8s ease-in-out infinite;
     }
 
-    /* micro-stripes for “foil feel” */
     .modal-fx.arcane::after{
       content:"";
       position:absolute;
       inset:0;
+      border-radius: inherit;
       pointer-events:none;
-      opacity: .10;
-      mix-blend-mode: overlay;
 
-      background: repeating-linear-gradient(
-        135deg,
-        rgba(255,255,255,.55) 0 2px,
-        rgba(255,255,255,0) 2px 10px
-      );
-    }
+      background:
+        radial-gradient(circle at 18% 22%, rgba(78, 138, 255, .24), transparent 46%),
+        radial-gradient(circle at 82% 78%, rgba(126, 98, 255, .24), transparent 50%);
+
+      mix-blend-mode: lighten;
+      opacity: .44;
+      filter: blur(1px) brightness(1.06) saturate(1.35);
+      transform: translate3d(var(--coneX2, 0px), var(--coneY2, 0px), 0) scale(1.04);
+      transform-origin: 50% 50%;
+      animation: arcanePulse 3.8s ease-in-out infinite reverse;
+    } 
 
 
     .modal-fx.holo{
       /* Lewd: pink/red foil with lust/heart vibe */
       background:
+        /* moving pink-red sheen */
         linear-gradient(120deg,
           rgba(255, 40, 120, .45),
           rgba(255, 90, 90, .35),
           rgba(255, 0, 120, .45),
           rgba(255, 40, 120, .45)),
+        /* subtle light sweep */
         linear-gradient(135deg,
           rgba(255,255,255,.18),
           rgba(255,255,255,0) 60%);
@@ -252,9 +269,10 @@
     .modal-fx.holo::after{
       content:"";
       position:absolute;
-      inset:0;
+      inset:0; /* FIX: do not overshoot container, iframe-safe */
       pointer-events:none;
-      background-color: rgba(255, 60, 141, 0.84);
+      /* SVG hearts (outline only) tiled */
+      background-color: rgba(255, 60, 141, 0.841);
       mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><path d='M60 95 C20 65,10 40,30 25 C45 15,60 30,60 30 C60 30,75 15,90 25 C110 40,100 65,60 95 Z' fill='none' stroke='white' stroke-width='10' stroke-linejoin='round'/></svg>");
       mask-size: 120px 120px;
       mask-repeat: repeat;
@@ -279,6 +297,7 @@
       position:absolute;
       inset:0;
       pointer-events:none;
+      /* two layers of tiny prismatic particles */
       background-image:
         radial-gradient(circle at 12px 18px, rgba(160,230,255,.70) 0 1px, transparent 2px),
         radial-gradient(circle at 54px 42px, rgba(210,170,255,.65) 0 1px, transparent 2px),
@@ -326,6 +345,18 @@
       100%{ background-position: 120px 240px; }
     }
 
+    @keyframes lewdShift{
+      0%{
+        background-position: 0 0, 0% 50%;
+      }
+      50%{
+        background-position: 140px 140px, 100% 50%;
+      }
+      100%{
+        background-position: 280px 280px, 0% 50%;
+      }
+    }
+
     .modal-fx.foil{
       background: linear-gradient(135deg,
         rgba(255,255,255,.35),
@@ -334,6 +365,7 @@
     }
 
     .modal-fx.poly{
+      /* Balatro-ish Polychrome: moving rainbow sheen (smooth loop) */
       background: conic-gradient(
         from 0deg,
         #ff0000, #ff7f00, #ffff00, #00ff00,
@@ -341,10 +373,15 @@
       );
       transform: scale(1.35) rotate(0deg);
       transform-origin: 50% 50%;
+
+      /* mais lento */
       animation: polySpin 6s linear infinite;
+
+      /* mais opaco */
       mix-blend-mode: overlay;
       opacity: .45;
     }
+
 
     @keyframes lewdSheen{
       0%{ background-position: 0% 50%, 0% 0%; }
@@ -359,6 +396,19 @@
       100%{
         transform: rotate(45deg) translate3d(-120px,120px,0) scale(1);
       }
+    }
+
+    /* Arcane (Uncommon) keyframes */
+    @keyframes arcanePulse{
+      0%{ opacity: .56; filter: saturate(1.4) brightness(1) hue-rotate(-8deg); }
+      50%{ opacity: .72; filter: saturate(1.75) brightness(1.1) hue-rotate(8deg); }
+      100%{ opacity: .56; filter: saturate(1.4) brightness(1) hue-rotate(-8deg); }
+    }
+
+    @keyframes arcaneSweep{
+      0%{ transform: translate3d(calc(var(--coneX, 0px) - 8px), calc(var(--coneY, 0px) - 6px), 0); opacity: .24; }
+      50%{ transform: translate3d(calc(var(--coneX, 0px) + 8px), calc(var(--coneY, 0px) + 6px), 0); opacity: .40; }
+      100%{ transform: translate3d(calc(var(--coneX, 0px) - 8px), calc(var(--coneY, 0px) - 6px), 0); opacity: .24; }
     }
 
     @keyframes polySpin{
@@ -516,6 +566,7 @@
       --mx: 0px;
       --my: 0px;
 
+      /* Size to the rendered card (no forced crop); scale down only if needed */
       width: fit-content;
       max-width: min(520px, 100%);
       max-height: 82vh;
@@ -528,15 +579,16 @@
       transform: translate3d(var(--mx), var(--my), 0) rotateX(var(--mrx)) rotateY(var(--mry));
       transition: transform 120ms ease;
 
-      pointer-events: auto;
+      pointer-events: auto; /* must receive hover/move */
     }
 
     .modal-card-float{
-      position: relative;
+      position: relative; /* makes .modal-fx absolute sizing match the card */
       border-radius: 40px;
       box-sizing: border-box;
-      overflow: hidden;
+      overflow: hidden; /* clip overlay to rounded corners */
 
+      /* Let the image define the box; only constrain it */
       width: fit-content;
       height: fit-content;
       max-width: min(520px, 100%);
@@ -547,7 +599,7 @@
       justify-content:center;
 
       animation: modalFloat 3.6s ease-in-out infinite;
-      animation-play-state: running;
+      animation-play-state: running; /* always floating */
       pointer-events: none;
     }
 
@@ -557,6 +609,9 @@
     }
 
     .modal-card-float img{
+      position: relative;
+      z-index: 1;
+      /* Show the full card; never crop */
       width: auto;
       height: auto;
       max-width: 100%;
@@ -615,6 +670,7 @@
 
     .desc[data-empty="true"]{ color: rgba(255,255,255,.55); }
 
+    /* reduced motion */
     @media (prefers-reduced-motion: reduce){
       .card, .chip { transition: none; }
       .card{ transform: none; }
@@ -671,9 +727,12 @@
 
   <script>
     // ---------- config ----------
+    // Paths: this file lives at /embed/cards.html
+    // Use ../ so it works on GitHub Pages (and avoids double /images/cards/)
     const DATA_URL = "../data/cards.json";
     const IMG_BASE = "../images/cards/";
-    const RARITIES = ["All", "Legendary", "Lewd", "Rare", "Uncommon", "Common"];
+
+    const RARITIES = ["All", "Legendary", "Lewd", "Rare", "Uncommon", "Common"]; // order matters
 
     // ---------- state ----------
     let allCards = [];
@@ -717,12 +776,17 @@
         .trim();
     }
 
+    // Avoid double paths when JSON already includes "images/cards/..." etc.
     function resolveImageUrl(image){
       const raw = String(image || "").trim();
       if(!raw) return "";
+      // absolute URLs
       if(/^https?:\/\//i.test(raw)) return raw;
+      // already an absolute path
       if(raw.startsWith("/")) return raw;
+      // already a relative path
       if(raw.startsWith("images/") || raw.startsWith("../") || raw.startsWith("./")) return raw;
+      // default: treat as filename under IMG_BASE
       return IMG_BASE + raw;
     }
 
@@ -736,6 +800,7 @@
         b.dataset.active = (r === activeRarity) ? "true" : "false";
         b.addEventListener("click", () => {
           activeRarity = r;
+          // update chip states
           for(const c of elChips.querySelectorAll(".chip")){
             c.dataset.active = (c.textContent === activeRarity) ? "true" : "false";
           }
@@ -771,12 +836,13 @@
       elModalRarityDot.style.background = rarityDotColor(c.rarity);
       elModalRarityText.textContent = rarityLabel || "Unknown";
 
+      // Balatro-ish rarity overlay (modal only)
       if(elModalFx){
         elModalFx.className = "modal-fx";
         const r = normalize(c.rarity);
         if(r === "lewd") elModalFx.classList.add("holo");
-        else if(r === "rare") elModalFx.classList.add("dust");
-        else if(r === "uncommon") elModalFx.classList.add("arcane");
+        else if(r === "rare") elModalFx.classList.add("arcane");
+        else if(r === "uncommon") elModalFx.classList.add("dust");
         else if(r === "legendary") elModalFx.classList.add("poly");
       }
 
@@ -789,8 +855,10 @@
         elModalDesc.dataset.empty = "true";
       }
 
+      // enable modal FX
       enableModalFX();
 
+      // lock scroll inside iframe
       document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
 
@@ -804,6 +872,7 @@
     let modalLast = null;
 
     function setModalVars(nx, ny){
+      // keep the card movement exactly as before
       const maxRot = 10;   // degrees
       const maxMove = 10;  // px
 
@@ -817,12 +886,36 @@
       elModalCardTilt.style.setProperty("--mx", `${mx}px`);
       elModalCardTilt.style.setProperty("--my", `${my}px`);
 
-      // FX parallax (slower than the card)
-      if(elModalFx){
-        const fxMove = maxMove * 0.35;
-        elModalFx.style.setProperty("--fxX", `${(-nx * fxMove).toFixed(2)}px`);
-        elModalFx.style.setProperty("--fxY", `${(-ny * fxMove).toFixed(2)}px`);
-      }
+      // FX + cone parallax (does NOT affect the card)
+      if(!elModalFx) return;
+
+      const fxMove = maxMove * 0.35;
+      const fxX = (-nx * fxMove).toFixed(2);
+      const fxY = (-ny * fxMove).toFixed(2);
+      const fxX2 = (nx * fxMove * 0.45).toFixed(2);
+      const fxY2 = (ny * fxMove * 0.45).toFixed(2);
+      elModalFx.style.setProperty("--fxX", `${fxX}px`);
+      elModalFx.style.setProperty("--fxY", `${fxY}px`);
+      elModalFx.style.setProperty("--fxX2", `${fxX2}px`);
+      elModalFx.style.setProperty("--fxY2", `${fxY2}px`);
+
+      // cone parallax: noticeable but still subtle, with smoothing
+      const coneStrength = 7; // px
+      const prevX = parseFloat(elModalFx.dataset.cx || "0");
+      const prevY = parseFloat(elModalFx.dataset.cy || "0");
+      const targetX = nx * coneStrength;
+      const targetY = ny * coneStrength;
+
+      // light damping so it moves but never snaps
+      const cx = prevX + (targetX - prevX) * 0.18;
+      const cy = prevY + (targetY - prevY) * 0.18;
+
+      elModalFx.dataset.cx = String(cx);
+      elModalFx.dataset.cy = String(cy);
+      elModalFx.style.setProperty("--coneX", `${cx.toFixed(2)}px`);
+      elModalFx.style.setProperty("--coneY", `${cy.toFixed(2)}px`);
+      elModalFx.style.setProperty("--coneX2", `${(-cx * 0.6).toFixed(2)}px`);
+      elModalFx.style.setProperty("--coneY2", `${(-cy * 0.6).toFixed(2)}px`);
     }
 
     function modalApply(){
@@ -859,11 +952,22 @@
       if(elModalFx){
         elModalFx.style.setProperty("--fxX", "0px");
         elModalFx.style.setProperty("--fxY", "0px");
+        elModalFx.style.setProperty("--fxX2", "0px");
+        elModalFx.style.setProperty("--fxY2", "0px");
+        elModalFx.style.setProperty("--coneX", "0px");
+        elModalFx.style.setProperty("--coneY", "0px");
+        elModalFx.style.setProperty("--coneX2", "0px");
+        elModalFx.style.setProperty("--coneY2", "0px");
+        delete elModalFx.dataset.cx;
+        delete elModalFx.dataset.cy;
       }
     }
 
     function enableModalFX(){
+      // float always while modal is open
       if(elModalCardFloat) elModalCardFloat.style.animationPlayState = "running";
+
+      // mouse-follow tilt only on hover
       modalFxOn = false;
       resetModalFX();
     }
@@ -877,13 +981,13 @@
     // track mouse ONLY when hovering the card in the modal
     elModalCardTilt.addEventListener("pointerenter", () => {
       if(reduceMotionGlobal) return;
-      modalFxOn = true;
+      modalFxOn = true; // enable ONLY mouse-follow
     });
 
     elModalCardTilt.addEventListener("pointermove", onModalMove);
 
     elModalCardTilt.addEventListener("pointerleave", () => {
-      modalFxOn = false;
+      modalFxOn = false; // pause mouse-follow
       resetModalFX();
     });
 
@@ -921,8 +1025,9 @@
           if(!last) return;
           const { nx, ny } = last;
 
-          const maxRot = 8;
-          const maxMove = 3;
+          // tune these values to taste
+          const maxRot = 8;      // degrees
+          const maxMove = 3;     // px
 
           const ry = (nx * maxRot).toFixed(2);
           const rx = (-ny * maxRot).toFixed(2);
@@ -937,13 +1042,14 @@
 
         function onMove(e){
           if(reduceMotion) return;
+          // only for mouse/pen; touch feels weird
           if(e.pointerType && e.pointerType === "touch") return;
 
           const rect = card.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width;
-          const y = (e.clientY - rect.top) / rect.height;
-          const nx = (x - 0.5) * 2;
-          const ny = (y - 0.5) * 2;
+          const x = (e.clientX - rect.left) / rect.width;   // 0..1
+          const y = (e.clientY - rect.top) / rect.height;   // 0..1
+          const nx = (x - 0.5) * 2; // -1..1
+          const ny = (y - 0.5) * 2; // -1..1
 
           last = { nx, ny };
           if(!raf) raf = requestAnimationFrame(applyTilt);
@@ -973,6 +1079,7 @@
         elGrid.appendChild(card);
       }
 
+      // nudge resize after render
       requestAnimationFrame(() => window.__sendResize && window.__sendResize(true));
     }
 
@@ -989,13 +1096,16 @@
       window.__sendResize && window.__sendResize(true);
     }
 
+    // Close button
     elCloseBtn.addEventListener("click", closeModal);
 
+    // Close by clicking outside the dialog (anywhere on the dark overlay)
     elModal.addEventListener("mousedown", (e) => {
       if(elModal.dataset.open !== "true") return;
       if(!elModalInner.contains(e.target)) closeModal();
     });
 
+    // Escape closes
     window.addEventListener("keydown", (e) => {
       if(e.key === "Escape" && elModal.dataset.open === "true") closeModal();
     });
@@ -1011,6 +1121,8 @@
         const r = await fetch(DATA_URL, { cache: "no-store" });
         const data = await r.json();
 
+        // Support both shapes:
+        // { cards: [...] } (project) OR { items: [...] } (alt)
         const raw = Array.isArray(data.cards) ? data.cards : (Array.isArray(data.items) ? data.items : []);
 
         allCards = raw
@@ -1061,6 +1173,7 @@
         }
       }
 
+      // Expose for the app to nudge resizes after renders
       window.__sendResize = send;
 
       window.addEventListener("load", () => send(true));

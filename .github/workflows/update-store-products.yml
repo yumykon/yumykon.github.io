@@ -1,4 +1,4 @@
-name: Update Ko-fi New Products JSON
+name: Update ACGGoods Products JSON
 
 on:
   workflow_dispatch:
@@ -20,24 +20,18 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install dependencies
-        run: |
-          npm init -y
-          npm i playwright
-          npx playwright install --with-deps chromium
-
       - name: Run scraper
         env:
-          KOFI_USERNAME: yumykon
-          KOFI_LIMIT: "8"
-          OUT_FILE: data/kofi_newproducts.json
-        run: node scripts/update_kofi_newproducts.mjs
+          ACG_STORE_SLUG: yumykon
+          ACG_LIMIT: "8"
+          OUT_FILE: data/store_products.json
+        run: node scripts/update_store_products.mjs
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/kofi_newproducts.json
+          git add data/store_products.json
           git diff --cached --quiet && exit 0
-          git commit -m "Update Ko-fi new products cache"
+          git commit -m "Update ACGGoods products cache"
           git push

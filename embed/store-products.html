@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kofi Widget</title>
+  <title>Store Widget</title>
 
   <style>
     html, body {
@@ -13,7 +13,7 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    .kofi-container {
+    .store-container {
       max-width: 1000px;
       margin: 0 auto;
       padding: 24px;
@@ -39,11 +39,15 @@
     .product img {
       width: 100%;
       display: block;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      background: #f5f5f5;
     }
 
     .info {
       padding: 10px 12px 14px;
       font-size: 14px;
+      line-height: 1.35;
     }
 
     .price {
@@ -62,17 +66,16 @@
   </style>
 </head>
 <body>
-
-  <div class="kofi-container" id="kofi"></div>
+  <div class="store-container" id="store"></div>
 
   <script>
-    fetch("/data/kofi_newproducts.json")
+    fetch("/data/store_products.json", { cache: "no-store" })
       .then(r => r.json())
       .then(data => {
-        const wrap = document.getElementById("kofi");
+        const wrap = document.getElementById("store");
 
-        if (!data.active) {
-          wrap.innerHTML = '<div class="empty">Shop temporarily unavailable</div>';
+        if (!Array.isArray(data.items) || data.items.length === 0) {
+          wrap.innerHTML = '<div class="empty">No products found</div>';
           return;
         }
 
@@ -83,41 +86,46 @@
           a.target = "_blank";
           a.rel = "noopener";
 
+          const title = String(item.title || "Product");
+          const price = String(item.price || "");
+          const image = String(item.image || "");
+
           a.innerHTML = `
-            <img src="${item.image}" alt="">
+            <img src="${image}" alt="${title.replace(/"/g, "&quot;")}">
             <div class="info">
-              ${item.title}
-              <span class="price">${item.price}</span>
+              ${title}
+              <span class="price">${price}</span>
             </div>
           `;
           wrap.appendChild(a);
         });
+      })
+      .catch(() => {
+        const wrap = document.getElementById("store");
+        wrap.innerHTML = '<div class="empty">Failed to load products</div>';
       });
   </script>
 
-  <!-- auto resize -->
   <script>
-  (function () {
-    const PARENT = "https://yumykon.com";
-    const ID = "kofiFrame";
+    (function () {
+      const PARENT = "https://yumykon.com";
+      const ID = "storeProductsFrame";
 
-    function h() {
-      return Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight
-      );
-    }
+      function h() {
+        return Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        );
+      }
 
-    function send() {
-      parent.postMessage({ type: "yumykon:resize", id: ID, height: h() }, PARENT);
-    }
+      function send() {
+        parent.postMessage({ type: "yumykon:resize", id: ID, height: h() }, PARENT);
+      }
 
-    new ResizeObserver(send).observe(document.documentElement);
-    window.addEventListener("load", send);
-    setTimeout(send, 300);
-  })();
-</script>
-
-
+      new ResizeObserver(send).observe(document.documentElement);
+      window.addEventListener("load", send);
+      setTimeout(send, 300);
+    })();
+  </script>
 </body>
 </html>

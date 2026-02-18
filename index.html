@@ -159,7 +159,7 @@
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
             <a href="yumyverse.html">Yumyverse</a>
-            <a href="http://ko-fi.com/yumykon/shop" target="_blank" rel="noopener">Stickers Shop</a>
+            <a href="https://acggoods.com/store/yumykon" target="_blank" rel="noopener">Stickers Shop</a>
             <a href="cards.html">Collectible Cards Club</a>
             <a href="https://patreon.yumykon.com" target="_blank" rel="noopener">Patreon</a>
             <a href="commissions.html">Commissions</a>
@@ -185,26 +185,26 @@
         </div>
 
         <div class="merch-container">
-            <h2>✨ Merch store ✨</h2>
-            <div class="merch-store" id="kofi-newproducts"></div>
+            <h2>Merch store</h2>
+            <div class="merch-store" id="store-products"></div>
 
-            <p id="kofi-shop-status" style="margin:14px 0 0; color:#000; display:none;">
-                Loja desativada (temporário)
+            <p id="store-status" style="margin:14px 0 0; color:#000; display:none;">
+                No products found
             </p>
 
-            <a href="shop.html" class="shop-button">Go to Shop ➺</a>
+            <a href="https://acggoods.com/store/yumykon" target="_blank" rel="noopener" class="shop-button">Go to Shop</a>
         </div>
     </div>
 
     <script>
   (async () => {
-    const grid = document.getElementById('kofi-newproducts');
-    const status = document.getElementById('kofi-shop-status');
+    const grid = document.getElementById('store-products');
+    const status = document.getElementById('store-status');
 
-    const DATA_URL = 'data/kofi_newproducts.json';
+    const DATA_URL = 'data/store_products.json';
 
-    function showInactive(msg) {
-      status.textContent = msg || 'Loja desativada (temporário)';
+    function showStatus(msg) {
+      status.textContent = msg || 'No products found';
       status.style.display = 'block';
       grid.innerHTML = '';
     }
@@ -224,15 +224,15 @@
 
     try {
       const res = await fetch(DATA_URL, { cache: 'no-store' });
-      if (!res.ok) return showInactive();
+      if (!res.ok) return showStatus('Failed to load products');
 
       const data = await res.json();
-      if (!data.active || !Array.isArray(data.items) || data.items.length === 0) return showInactive();
+      if (!Array.isArray(data.items) || data.items.length === 0) return showStatus();
 
       status.style.display = 'none';
       grid.innerHTML = data.items.slice(0, 8).map(cardHtml).join('');
     } catch {
-      showInactive();
+      showStatus('Failed to load products');
     }
   })();
 </script>
