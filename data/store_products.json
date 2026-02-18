@@ -1,5 +1,63 @@
 {
-  "updated_at": "2026-02-18T13:11:24.482Z",
-  "active": false,
-  "items": []
+  "updated_at": "2026-02-18T13:32:53.949Z",
+  "source": "acggoods",
+  "store_url": "https://acggoods.com/store/yumykon",
+  "items": [
+    {
+      "url": "https://acggoods.com/product/a3-print-winter-yae-miko-by-yumykon/273198",
+      "image": "https://img02.wooacry.com/rzr/2026/02/17/4da6de96-a7f5-495c-a765-d6773c2c6313.jpg?x-oss-process=image/auto-orient,1/format,png/resize,w_600/interlace,1",
+      "title": "A3 Print | Winter Yae Miko ❄️🩷",
+      "price": "$25.00",
+      "source": "acggoods"
+    },
+    {
+      "url": "https://acggoods.com/product/a4-print-winter-yae-miko-by-yumykon/273196",
+      "image": "https://img02.wooacry.com/rzr/2026/02/17/aa326009-61ff-4729-a0c8-d18423ccaf66.jpg?x-oss-process=image/auto-orient,1/format,png/resize,w_600/interlace,1",
+      "title": "A4 Print | Winter Yae Miko ❄️🩷",
+      "price": "$15.00",
+      "source": "acggoods"
+    },
+    {
+      "url": "https://acggoods.com/product/a4-print-bel-the-troublemaker-by-yumykon/261598",
+      "image": "https://img02.wooacry.com/rzr/2026/02/14/b52e1e60-6284-4419-82ce-cce6ff56b513.jpg?x-oss-process=image/auto-orient,1/format,png/resize,w_600/interlace,1",
+      "title": "A4 Print | Übel, the troublemaker ✨",
+      "price": "$15.00",
+      "source": "acggoods"
+    },
+    {
+      "url": "https://acggoods.com/product/a3-print-winter-frieren-by-yumykon/261482",
+      "image": "https://img02.wooacry.com/rzr/2026/02/14/cf8239e9-c9bf-488d-98ea-67a065aa9fea.jpg?x-oss-process=image/auto-orient,1/format,png/resize,w_600/interlace,1",
+      "title": "A3 Print | Winter Frieren ❄️🩵",
+      "price": "$25.00",
+      "source": "acggoods"
+    },
+    {
+      "url": "https://acggoods.com/product/yumykon-zerotwo-by-yumykon/261554",
+      "image": "https://img02.wooacry.com/rzu/2026/02/14/2e68fe1e-fc9e-4578-ba93-c5ce48e1f15b.png?x-oss-process=image/auto-orient,1/resize,w_600/interlace,1",
+      "title": "Yumykon 💖 ZeroTwo",
+      "price": "$3.59",
+      "source": "acggoods"
+    },
+    {
+      "url": "https://acggoods.com/product/yumykon-zerotwo-by-yumykon/261530",
+      "image": "https://img03.yinge.tech/acg/2026/02/14/ACG_286950/41bfd667-0146-4879-b051-556ea386137f.png?x-oss-process=image/auto-orient,1/resize,w_600/interlace,1",
+      "title": "Yumykon 💖 ZeroTwo",
+      "price": "$3.59",
+      "source": "acggoods"
+    },
+    {
+      "url": "https://acggoods.com/product/yumykon-date-kaori-by-yumykon/261524",
+      "image": "https://img02.wooacry.com/rzu/2026/02/14/8a485fb1-1587-49f8-ad80-e9953d486e4f.jpg?x-oss-process=image/auto-orient,1/format,png/resize,w_600/interlace,1",
+      "title": "Yumykon ⭐ - Date Kaori",
+      "price": "$3.59",
+      "source": "acggoods"
+    },
+    {
+      "url": "https://acggoods.com/product/frieren-by-yumykon/261450",
+      "image": "https://img02.wooacry.com/rzr/2026/02/14/e811d737-182d-4c53-bd73-95811c17bd60.jpg?x-oss-process=image/auto-orient,1/format,png/resize,w_600/interlace,1",
+      "title": "Frieren 🤍",
+      "price": "$3.59",
+      "source": "acggoods"
+    }
+  ]
 }
