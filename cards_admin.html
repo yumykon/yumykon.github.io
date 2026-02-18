@@ -305,9 +305,7 @@
       const submitBtn = document.getElementById('submitBtn');
       const statusEl = document.getElementById('status');
 
-      const GH_TOKEN_RAW = (ghTokenEl.value || '').trim();
       const PREFIX = 'github_pat_';
-      const GH_TOKEN = PREFIX + GH_TOKEN_RAW;
 
       const allowedRarities = new Set(['legendary','lewd','rare','uncommon','common']);
 
@@ -428,9 +426,9 @@
       }
 
       function validateForm() {
-        if (!GH_TOKEN_RAW) throw new Error('GitHub token is missing in the HTML value.');
-
-        const token = GH_TOKEN;
+        const tokenInput = (ghTokenEl.value || '').trim();
+        if (!tokenInput) throw new Error('GitHub token is required.');
+        const token = tokenInput.startsWith(PREFIX) ? tokenInput : (PREFIX + tokenInput);
         const repo = assertRepo(repoEl.value);
 
         const name = (cardName.value || '').trim();
