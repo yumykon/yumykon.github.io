@@ -1,6 +1,13 @@
 {
-  "updated_at": "2026-02-02T06:33:16.926Z",
+  "updated_at": "2026-02-18T14:33:26.974Z",
   "cards": [
+    {
+      "id": "karitarina-1771425205243",
+      "name": "Karitarina",
+      "rarity": "rare",
+      "description": "This card was the fourth one released in the first collection of Yumyverse CTC. In this artwork, Kari is interpreting Katarina from League of Legends.\n\nBesides Kari’s design and color palette matching Katarina’s, I think they also share some subtle similarities in personality. Kari is an active League of Legends player, which makes the concept even more fitting.\n\nI personally played LoL for a short time and don’t regret quitting; I have much more affection for the series Arcane. Still, I have a soft spot for the universe of Runeterra and its characters.",
+      "image": "images/cards/karitarina-1771425205243.png"
+    },
     {
       "id": "kanash-1770013995043",
       "name": "Kanash",
